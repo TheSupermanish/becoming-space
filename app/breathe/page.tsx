@@ -237,33 +237,8 @@ export default function BreathePage() {
                 }}
               />
               
-              {/* Background ring with pulse */}
-              <div className={`absolute inset-4 rounded-full border-[3px] border-blue-200/50 ${isBreathing ? 'animate-pulse' : ''}`} 
-                style={{ animationDuration: '2s' }}
-              />
-              
-              {/* Progress ring */}
-              <svg className="absolute inset-4 w-[calc(100%-2rem)] h-[calc(100%-2rem)] -rotate-90">
-                <circle
-                  cx="50%"
-                  cy="50%"
-                  r="48%"
-                  fill="none"
-                  stroke="url(#breathGradient)"
-                  strokeWidth="4"
-                  strokeLinecap="round"
-                  strokeDasharray="302"
-                  strokeDashoffset={isBreathing ? (302 - (302 * (1 - countdown / BREATH_TIMING[phase]))) : 302}
-                  className="transition-all ease-linear"
-                  style={{ transitionDuration: '1s' }}
-                />
-                <defs>
-                  <linearGradient id="breathGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#38bdf8" />
-                    <stop offset="100%" stopColor="#22d3ee" />
-                  </linearGradient>
-                </defs>
-              </svg>
+              {/* Background ring */}
+              <div className="absolute inset-4 rounded-full border-[3px] border-blue-200/30" />
               
               {/* Animated breathing circle */}
               <div
