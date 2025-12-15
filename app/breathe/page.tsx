@@ -7,13 +7,14 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import type { SessionUser } from '@/lib/types';
 
-type BreathPhase = 'inhale' | 'hold' | 'exhale' | 'rest';
+type BreathPhase = 'inhale' | 'holdIn' | 'exhale' | 'holdOut' | 'rest';
 type Exercise = 'breathing' | 'grounding';
 
 const BREATH_TIMING = {
   inhale: 4,
-  hold: 4,
+  holdIn: 4,
   exhale: 6,
+  holdOut: 2,
   rest: 2,
 };
 
@@ -58,6 +59,7 @@ export default function BreathePage() {
 
   const startBreathing = useCallback(() => {
     setIsBreathing(true);
+    setPrevPhase('rest');
     setPhase('inhale');
     setCountdown(BREATH_TIMING.inhale);
   }, []);
@@ -88,12 +90,15 @@ export default function BreathePage() {
             setPrevPhase(currentPhase); // Track what phase we came from
             switch (currentPhase) {
               case 'inhale':
-                setCountdown(BREATH_TIMING.hold);
-                return 'hold';
-              case 'hold':
+                setCountdown(BREATH_TIMING.holdIn);
+                return 'holdIn';
+              case 'holdIn':
                 setCountdown(BREATH_TIMING.exhale);
                 return 'exhale';
               case 'exhale':
+                setCountdown(BREATH_TIMING.holdOut);
+                return 'holdOut';
+              case 'holdOut':
                 setCycles((c) => c + 1);
                 setCountdown(BREATH_TIMING.inhale);
                 return 'inhale';
@@ -117,8 +122,9 @@ export default function BreathePage() {
   const getBreathingText = () => {
     switch (phase) {
       case 'inhale': return 'Breathe in...';
-      case 'hold': return 'Hold...';
+      case 'holdIn': return 'Hold...';
       case 'exhale': return 'Breathe out...';
+      case 'holdOut': return 'Hold...';
       default: return 'Ready?';
     }
   };
@@ -126,11 +132,10 @@ export default function BreathePage() {
   const getCircleScale = () => {
     if (!isBreathing) return 0.7;
     switch (phase) {
-      case 'inhale': return 1; // Growing to full
-      case 'hold': 
-        // Hold at whatever size we were at from the previous phase
-        return prevPhase === 'inhale' ? 1 : 0.7;
-      case 'exhale': return 0.7; // Shrinking to small
+      case 'inhale': return 1;      // Growing to full
+      case 'holdIn': return 1;      // Stay full after inhale
+      case 'exhale': return 0.7;    // Shrinking to small
+      case 'holdOut': return 0.7;   // Stay small after exhale
       default: return 0.7;
     }
   };
@@ -139,8 +144,9 @@ export default function BreathePage() {
     if (!isBreathing) return '0.5s';
     switch (phase) {
       case 'inhale': return `${BREATH_TIMING.inhale}s`;
-      case 'hold': return '0s'; // No animation during hold - instant hold
+      case 'holdIn': return '0s';   // No animation - stay big
       case 'exhale': return `${BREATH_TIMING.exhale}s`;
+      case 'holdOut': return '0s';  // No animation - stay small
       default: return '0.5s';
     }
   };
@@ -328,17 +334,21 @@ export default function BreathePage() {
 
             {/* Pattern Guide */}
             <div className="mt-8 pt-6 border-t border-sand/30">
-              <div className="flex justify-center items-center gap-3 text-xs">
+              <div className="flex flex-wrap justify-center items-center gap-2 text-xs">
                 <span className={`px-3 py-1.5 rounded-full transition-all ${phase === 'inhale' ? 'bg-blue-100 text-blue-600 font-semibold' : 'text-stone'}`}>
-                  4s inhale
+                  4s in
                 </span>
-                <span className="text-stone/30 flex items-center">→</span>
-                <span className={`px-3 py-1.5 rounded-full transition-all ${phase === 'hold' ? 'bg-cyan-100 text-cyan-600 font-semibold' : 'text-stone'}`}>
+                <span className="text-stone/30">→</span>
+                <span className={`px-3 py-1.5 rounded-full transition-all ${phase === 'holdIn' ? 'bg-cyan-100 text-cyan-600 font-semibold' : 'text-stone'}`}>
                   4s hold
                 </span>
-                <span className="text-stone/30 flex items-center">→</span>
+                <span className="text-stone/30">→</span>
                 <span className={`px-3 py-1.5 rounded-full transition-all ${phase === 'exhale' ? 'bg-teal-100 text-teal-600 font-semibold' : 'text-stone'}`}>
-                  6s exhale
+                  6s out
+                </span>
+                <span className="text-stone/30">→</span>
+                <span className={`px-3 py-1.5 rounded-full transition-all ${phase === 'holdOut' ? 'bg-purple-100 text-purple-600 font-semibold' : 'text-stone'}`}>
+                  2s hold
                 </span>
               </div>
             </div>
