@@ -1,0 +1,195 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-earth: #C67B5C;
+  --color-sage: #8FA68A;
+  --color-bark: #3D3631;
+  --color-stone: #6B6259;
+  --color-cream: #FAF7F2;
+  --color-sand: #E8E2D9;
+  --color-gold: #D4A574;
+  --color-blur-bg: #F5E6E0;
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@layer base {
+  html {
+    @apply antialiased;
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-cream text-bark font-sans;
+    background-image: 
+      radial-gradient(ellipse at 0% 0%, rgba(198, 123, 92, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 100% 0%, rgba(143, 166, 138, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 100%, rgba(212, 165, 116, 0.06) 0%, transparent 50%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    padding-bottom: calc(64px + var(--safe-area-bottom));
+  }
+
+  ::selection {
+    @apply bg-earth/20 text-bark;
+  }
+
+  /* Prevent overscroll */
+  html, body {
+    overscroll-behavior: none;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-earth text-white font-semibold px-6 py-3 rounded-2xl 
+           hover:bg-earth-dark active:scale-[0.98] transition-all duration-200
+           shadow-warm hover:shadow-glow focus:outline-none focus:ring-2 
+           focus:ring-earth/30 focus:ring-offset-2 focus:ring-offset-cream;
+  }
+
+  .btn-secondary {
+    @apply bg-sand text-bark font-semibold px-6 py-3 rounded-2xl 
+           hover:bg-sand-dark active:scale-[0.98] transition-all duration-200
+           border border-stone/10 focus:outline-none focus:ring-2 
+           focus:ring-stone/20 focus:ring-offset-2 focus:ring-offset-cream;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-stone font-medium px-4 py-2 rounded-xl
+           hover:bg-bark/5 active:scale-[0.98] transition-all duration-200;
+  }
+
+  .card {
+    @apply bg-white rounded-3xl shadow-soft border border-sand/50 p-6;
+  }
+
+  .card-interactive {
+    @apply card hover:shadow-warm transition-shadow duration-300;
+  }
+
+  .input-field {
+    @apply w-full bg-cream border border-sand rounded-2xl px-4 py-3.5
+           text-bark placeholder:text-stone/50 transition-all duration-200
+           focus:outline-none focus:ring-2 focus:ring-earth/20 focus:border-earth/30;
+  }
+
+  .tag-pill {
+    @apply inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium
+           bg-sand/60 text-stone border border-sand transition-all duration-200;
+  }
+
+  .tag-pill-active {
+    @apply bg-earth text-white border-earth shadow-warm;
+  }
+
+  .blurred-content {
+    @apply relative bg-blur-bg rounded-2xl p-4 border border-earth/10;
+  }
+
+  .blurred-content-text {
+    @apply blur-md select-none;
+  }
+
+  .avatar {
+    @apply w-12 h-12 rounded-full bg-gradient-to-br from-earth/20 to-sage/20 
+           flex items-center justify-center text-bark font-bold border-2 border-white shadow-soft;
+  }
+
+  /* Safe area support for bottom nav */
+  .safe-area-bottom {
+    padding-bottom: var(--safe-area-bottom);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .glass {
+    @apply bg-white/80 backdrop-blur-xl border border-white/50;
+  }
+
+  .texture-paper {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    background-blend-mode: soft-light;
+    opacity: 0.03;
+  }
+
+  /* Shimmer effect for loading states */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.4) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+  }
+}
+
+/* Custom scrollbar for webkit */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-stone/20 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-stone/30;
+}
+
+/* Focus visible for accessibility */
+:focus-visible {
+  @apply outline-none ring-2 ring-earth/30 ring-offset-2;
+}
+
+/* Active states for touch devices */
+@media (hover: none) {
+  .btn-primary:active,
+  .btn-secondary:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  body {
+    background: white;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
