@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, BookOpen, PenLine, Sparkles, Calendar, Lock, Trash2, X, RefreshCw, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowLeft, BookOpen, PenLine, Sparkles, Calendar, Lock, Trash2, X, RefreshCw, ChevronDown, ChevronUp, Edit3 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { MOOD_EMOJIS, IJournalEntry } from '@/lib/types';
@@ -20,6 +20,9 @@ export default function JournalPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [expandedEntry, setExpandedEntry] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [editingEntry, setEditingEntry] = useState<IJournalEntry | null>(null);
+  const [editContent, setEditContent] = useState('');
+  const [editMood, setEditMood] = useState<1 | 2 | 3 | 4 | 5 | null>(null);
 
   useEffect(() => {
     fetch('/api/auth/me')
@@ -100,6 +103,45 @@ export default function JournalPage() {
       }
     } catch (error) {
       console.error('Failed to delete entry:', error);
+    }
+  };
+
+  const startEditing = (entry: IJournalEntry) => {
+    setEditingEntry(entry);
+    setEditContent(entry.content);
+    setEditMood(entry.mood || null);
+  };
+
+  const cancelEditing = () => {
+    setEditingEntry(null);
+    setEditContent('');
+    setEditMood(null);
+  };
+
+  const handleEditSubmit = async () => {
+    if (!editingEntry || !editContent.trim()) return;
+
+    setIsSubmitting(true);
+    try {
+      const res = await fetch(`/api/journal/${editingEntry._id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          content: editContent.trim(),
+          mood: editMood,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setEntries(entries.map((e) => 
+          e._id.toString() === editingEntry._id.toString() ? data.data : e
+        ));
+        cancelEditing();
+      }
+    } catch (error) {
+      console.error('Failed to update entry:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -386,16 +428,21 @@ export default function JournalPage() {
             )}
             {filteredEntries.map((entry) => {
               const isExpanded = expandedEntry === entry._id.toString();
+              const isEditing = editingEntry?._id.toString() === entry._id.toString();
               const preview = entry.content.slice(0, 200);
               const hasMore = entry.content.length > 200;
 
               return (
                 <Card key={entry._id.toString()} className="group">
-                  {/* Title (Prompt) with Icon */}
+                  {/* Title (Prompt) with Icon/Emoji */}
                   <div className="flex justify-between items-start mb-2">
                     <div className="flex items-start gap-3 flex-1">
-                      <div className="w-8 h-8 bg-rose-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <PenLine size={16} className="text-rose-500" />
+                      <div className="w-10 h-10 bg-rose-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                        {entry.mood ? (
+                          <span className="text-2xl">{MOOD_EMOJIS[entry.mood as keyof typeof MOOD_EMOJIS].emoji}</span>
+                        ) : (
+                          <PenLine size={18} className="text-rose-500" />
+                        )}
                       </div>
                       <div className="flex-1">
                         <h3 className="font-serif font-bold text-bark text-lg leading-snug">
@@ -406,50 +453,101 @@ export default function JournalPage() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      {entry.mood && (
-                        <span className="text-xl">{MOOD_EMOJIS[entry.mood as keyof typeof MOOD_EMOJIS].emoji}</span>
-                      )}
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => startEditing(entry)}
+                        className="opacity-0 group-hover:opacity-100 p-1.5 text-stone/40 hover:text-rose-500 transition-all"
+                        title="Edit"
+                      >
+                        <Edit3 size={16} />
+                      </button>
                       <button
                         onClick={() => handleDelete(entry._id.toString())}
                         className="opacity-0 group-hover:opacity-100 p-1.5 text-stone/40 hover:text-red-500 transition-all"
+                        title="Delete"
                       >
                         <Trash2 size={16} />
                       </button>
                     </div>
                   </div>
 
-                  {/* Content */}
-                  <div className="ml-11">
-                    <p className="text-bark whitespace-pre-wrap text-[15px] leading-relaxed">
-                      {isExpanded ? entry.content : preview}
-                      {!isExpanded && hasMore && '...'}
-                    </p>
-
-                    {hasMore && (
-                      <button
-                        onClick={() => setExpandedEntry(isExpanded ? null : entry._id.toString())}
-                        className="text-rose-500 text-sm font-medium mt-2 flex items-center gap-1 hover:underline"
-                      >
-                        {isExpanded ? (
-                          <>Show less <ChevronUp size={14} /></>
-                        ) : (
-                          <>Read more <ChevronDown size={14} /></>
-                        )}
-                      </button>
-                    )}
-
-                    {/* Space's Response */}
-                    {entry.spaceResponse && (
-                      <div className="mt-4 p-3 bg-sage/10 rounded-xl border border-sage/20">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Sparkles size={14} className="text-sage" />
-                          <span className="text-xs font-medium text-sage">Space</span>
+                  {/* Content or Edit Form */}
+                  <div className="ml-13 pl-[52px]">
+                    {isEditing ? (
+                      <div className="space-y-4">
+                        <textarea
+                          value={editContent}
+                          onChange={(e) => setEditContent(e.target.value)}
+                          className="w-full h-32 bg-cream border-0 rounded-xl p-4 text-bark placeholder-stone/40 resize-none focus:outline-none focus:ring-2 focus:ring-rose-200"
+                          maxLength={10000}
+                          autoFocus
+                        />
+                        
+                        {/* Mood selector */}
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-stone">Mood:</span>
+                          {([1, 2, 3, 4, 5] as const).map((mood) => (
+                            <button
+                              key={mood}
+                              type="button"
+                              onClick={() => setEditMood(editMood === mood ? null : mood)}
+                              className={`p-1.5 text-xl rounded-lg transition-all ${
+                                editMood === mood ? 'bg-rose-100 scale-110' : 'hover:bg-sand/50'
+                              }`}
+                            >
+                              {MOOD_EMOJIS[mood].emoji}
+                            </button>
+                          ))}
                         </div>
-                        <p className="text-sm text-bark/80 leading-relaxed">
-                          {entry.spaceResponse}
-                        </p>
+
+                        <div className="flex gap-2 justify-end">
+                          <Button variant="ghost" size="sm" onClick={cancelEditing}>
+                            Cancel
+                          </Button>
+                          <Button
+                            size="sm"
+                            onClick={handleEditSubmit}
+                            disabled={!editContent.trim()}
+                            isLoading={isSubmitting}
+                            className="bg-gradient-to-r from-rose-400 to-pink-400"
+                          >
+                            Save
+                          </Button>
+                        </div>
                       </div>
+                    ) : (
+                      <>
+                        <p className="text-bark whitespace-pre-wrap text-[15px] leading-relaxed">
+                          {isExpanded ? entry.content : preview}
+                          {!isExpanded && hasMore && '...'}
+                        </p>
+
+                        {hasMore && (
+                          <button
+                            onClick={() => setExpandedEntry(isExpanded ? null : entry._id.toString())}
+                            className="text-rose-500 text-sm font-medium mt-2 flex items-center gap-1 hover:underline"
+                          >
+                            {isExpanded ? (
+                              <>Show less <ChevronUp size={14} /></>
+                            ) : (
+                              <>Read more <ChevronDown size={14} /></>
+                            )}
+                          </button>
+                        )}
+
+                        {/* Space's Response */}
+                        {entry.spaceResponse && (
+                          <div className="mt-4 p-3 bg-sage/10 rounded-xl border border-sage/20">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Sparkles size={14} className="text-sage" />
+                              <span className="text-xs font-medium text-sage">Space</span>
+                            </div>
+                            <p className="text-sm text-bark/80 leading-relaxed">
+                              {entry.spaceResponse}
+                            </p>
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 </Card>
