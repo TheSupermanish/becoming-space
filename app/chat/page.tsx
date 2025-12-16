@@ -227,8 +227,8 @@ export default function ChatPage() {
         </div>
 
         {/* Input - Fixed at bottom, above nav with proper spacing */}
-        <div className="sticky bottom-0 bg-cream/95 backdrop-blur-xl px-4 py-3 pb-24 lg:pb-4 border-t border-sand/30">
-          <form onSubmit={handleSend} className="flex items-center gap-3">
+        <div className="sticky bottom-0 bg-cream/95 backdrop-blur-xl px-6 py-3 pb-24 lg:pb-4 border-t border-sand/30">
+          <form onSubmit={handleSend} className="flex items-center gap-3 max-w-2xl mx-auto">
             <div className="flex-1 relative">
               <input
                 type="text"
