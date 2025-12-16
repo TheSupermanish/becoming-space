@@ -196,16 +196,16 @@ export default function CreatePostPage() {
               </div>
             </div>
 
-            {/* Athena Info */}
+            {/* Space Info */}
             <div className={`rounded-2xl p-4 mb-6 ${isVent ? 'bg-indigo-50' : 'bg-amber-50'}`}>
               <div className="flex items-start gap-3">
                 <Sparkles className={isVent ? 'text-indigo-500' : 'text-amber-500'} size={20} />
                 <div>
-                  <p className="font-medium text-bark text-sm">Athena will respond</p>
+                  <p className="font-medium text-bark text-sm">Space will respond</p>
                   <p className="text-xs text-stone mt-1">
                     {isVent 
-                      ? 'Athena will provide supportive guidance and gentle coping strategies.' 
-                      : 'Athena will celebrate with you and help you appreciate your growth!'
+                      ? 'Space will provide supportive guidance and gentle coping strategies.' 
+                      : 'Space will celebrate with you and help you appreciate your growth!'
                     }
                   </p>
                 </div>

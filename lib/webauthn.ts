@@ -113,9 +113,9 @@ export async function verifyAuthResponse(
     expectedChallenge,
     expectedOrigin: origin,
     expectedRPID: rpID,
-    authenticator: {
-      credentialID: bufferToBase64url(credential.credentialId),
-      credentialPublicKey: new Uint8Array(credential.publicKey),
+    credential: {
+      id: bufferToBase64url(credential.credentialId),
+      publicKey: new Uint8Array(credential.publicKey),
       counter: credential.counter,
       transports: credential.transports,
     },

@@ -105,11 +105,11 @@ const PostSchema = new Schema<PostDocument>(
       type: ModerationSchema,
       default: () => ({ isBlurred: false, severity: 'none' }),
     },
-    athenaResponse: {
+    spaceResponse: {
       type: String,
       default: null,
     },
-    isAthenaThinking: {
+    isSpaceThinking: {
       type: Boolean,
       default: true,
     },

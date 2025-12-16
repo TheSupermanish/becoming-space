@@ -26,7 +26,7 @@ Mental health stigma remains a significant barrier worldwide, especially in coll
 
 **Space** creates a judgment-free zone where anyone can:
 - Share their struggles anonymously using **passkey authentication** (no email, no password, no identity)
-- Receive immediate, empathetic responses from **Athena**, our AI therapist powered by Google Gemini
+- Receive immediate, empathetic responses from **Space**, our AI therapist powered by Google Gemini
 - Connect with a supportive community through comments and reactions
 - Access evidence-based mental wellness tools anytime, anywhere
 
@@ -46,8 +46,8 @@ Celebrate your wins, no matter how small. Positive moments deserve recognition!
 - **🙌 High-Fives** - Community celebrates with you
 - **Amber-themed UI** with energetic, uplifting design
 
-### 🤖 Athena - AI Therapist
-Powered by Google Gemini, Athena provides:
+### 🤖 Space - AI Therapist
+Powered by Google Gemini, Space provides:
 - **Personalized therapeutic responses** to every post
 - **1-on-1 chat sessions** for deeper conversations
 - **Content moderation** to keep the community safe
@@ -217,13 +217,13 @@ space/
 │   ├── api/                  # API routes
 │   │   ├── auth/             # WebAuthn authentication
 │   │   ├── posts/            # Posts CRUD & reactions
-│   │   ├── chat/             # Athena chat endpoint
+│   │   ├── chat/             # Space chat endpoint
 │   │   ├── mood/             # Mood check-in API
 │   │   ├── journal/          # Private journal API
 │   │   └── streak/           # Streak tracking API
 │   ├── feed/                 # Main feed page
 │   ├── create/               # Post creation page
-│   ├── chat/                 # Athena chat interface
+│   ├── chat/                 # Space chat interface
 │   ├── checkin/              # Daily mood check-in
 │   ├── journal/              # Private journal
 │   ├── breathe/              # Breathing & grounding tools
@@ -275,7 +275,7 @@ space/
 | `/api/posts` | GET/POST | List posts / Create post |
 | `/api/posts/[id]` | GET/PATCH/DELETE | Get/Update/Delete post |
 | `/api/posts/[id]/comments` | POST/PATCH | Add/Like comment |
-| `/api/chat` | POST/DELETE | Chat with Athena / Clear history |
+| `/api/chat` | POST/DELETE | Chat with Space / Clear history |
 | `/api/mood` | GET/POST | Get mood history / Log mood |
 | `/api/journal` | GET/POST | Get entries / Create entry |
 | `/api/journal/[id]` | PATCH/DELETE | Update/Delete entry |
@@ -290,7 +290,7 @@ space/
 | Color | Hex | Usage |
 |-------|-----|-------|
 | Earth | `#C67B5C` | Primary actions, buttons |
-| Sage | `#8FA68A` | Success, Athena, calming |
+| Sage | `#8FA68A` | Success, Space, calming |
 | Bark | `#3D3631` | Text, headings |
 | Stone | `#6B6259` | Secondary text |
 | Cream | `#FAF7F2` | Background |
@@ -325,7 +325,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- **Google Gemini** for powering Athena's therapeutic responses
+- **Google Gemini** for powering Space's therapeutic responses
 - **SimpleWebAuthn** for passwordless authentication
 - **Tailwind CSS** for the beautiful, responsive design
 - The mental health community for inspiration and feedback

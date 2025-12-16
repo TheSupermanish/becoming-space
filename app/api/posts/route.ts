@@ -91,12 +91,12 @@ export async function POST(request: NextRequest) {
       postType: validPostType,
       tags: tags && Array.isArray(tags) && tags.length > 0 ? tags : ['General'],
       moderation,
-      isAthenaThinking: true,
+      isSpaceThinking: true,
       reactions: { hugs: 0, huggedBy: [], highFives: 0, highFivedBy: [] },
     });
 
-    // Generate Athena's response asynchronously (don't wait)
-    generateAthenaResponse(post._id.toString(), content, tags || ['General'], validPostType);
+    // Generate Space's response asynchronously (don't wait)
+    generateSpaceResponse(post._id.toString(), content, tags || ['General'], validPostType);
 
     return NextResponse.json({
       success: true,
@@ -111,25 +111,25 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Helper to generate Athena response in background
-async function generateAthenaResponse(postId: string, content: string, tags: string[], postType: PostType) {
+// Helper to generate Space response in background
+async function generateSpaceResponse(postId: string, content: string, tags: string[], postType: PostType) {
   try {
-    const athenaResponse = await geminiService.generateAthenaResponse(content, tags, postType);
+    const spaceResponse = await geminiService.generateSpaceResponse(content, tags, postType);
     
     await dbConnect();
     await Post.findByIdAndUpdate(postId, {
-      athenaResponse,
-      isAthenaThinking: false,
+      spaceResponse,
+      isSpaceThinking: false,
     });
   } catch (error) {
-    console.error('Athena response error:', error);
+    console.error('Space response error:', error);
     const fallback = postType === 'flex' 
       ? "That's amazing! Keep celebrating your wins, no matter how small they seem. 🎉"
       : "I'm here with you. While I'm having trouble connecting right now, please know that your feelings are valid.";
     
     await Post.findByIdAndUpdate(postId, {
-      athenaResponse: fallback,
-      isAthenaThinking: false,
+      spaceResponse: fallback,
+      isSpaceThinking: false,
     });
   }
 }

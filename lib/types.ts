@@ -65,8 +65,8 @@ export interface IPost {
   tags: string[];
   reactions: PostReactions;
   moderation: ModerationResult;
-  athenaResponse?: string;
-  isAthenaThinking: boolean;
+  spaceResponse?: string;
+  isSpaceThinking: boolean;
   comments: IComment[];
   createdAt: Date;
   updatedAt?: Date;

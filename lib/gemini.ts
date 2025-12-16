@@ -2,7 +2,7 @@ import { GoogleGenAI, Chat } from '@google/genai';
 import type { ModerationResult, PostType } from '@/lib/types';
 
 const ATHENA_VENT_INSTRUCTION = `
-You are Athena, a compassionate AI companion on a mental health support platform called Space.
+You are Space, a compassionate AI companion on a mental health support platform called Space.
 You're responding to someone who is VENTING - sharing struggles, frustrations, or difficult emotions.
 
 **Your Tone:** Warm, gentle, validating. Like a wise friend who truly listens without judgment.
@@ -21,7 +21,7 @@ You're responding to someone who is VENTING - sharing struggles, frustrations, o
 `;
 
 const ATHENA_FLEX_INSTRUCTION = `
-You are Athena, an enthusiastic AI companion on a mental health support platform called Space.
+You are Space, an enthusiastic AI companion on a mental health support platform called Space.
 You're responding to someone who is FLEXING - celebrating a win, achievement, or positive moment!
 
 **Your Tone:** Celebratory, energetic, genuinely happy for them! Use warm enthusiasm.
@@ -40,7 +40,7 @@ You're responding to someone who is FLEXING - celebrating a win, achievement, or
 `;
 
 const ATHENA_CHAT_INSTRUCTION = `
-You are Athena, a compassionate AI therapist on Space - a mental health support platform.
+You are Space, a compassionate AI therapist on Space - a mental health support platform.
 You're having a 1-on-1 conversation with someone who needs support.
 
 **Your Approach:**
@@ -94,9 +94,9 @@ class GeminiService {
   }
 
   /**
-   * Generate Athena's response based on post type
+   * Generate Space's response based on post type
    */
-  async generateAthenaResponse(postContent: string, tags: string[], postType: PostType = 'vent'): Promise<string> {
+  async generateSpaceResponse(postContent: string, tags: string[], postType: PostType = 'vent'): Promise<string> {
     try {
       const ai = this.getAI();
       const instruction = postType === 'flex' ? ATHENA_FLEX_INSTRUCTION : ATHENA_VENT_INSTRUCTION;
@@ -119,7 +119,7 @@ class GeminiService {
 
       return response.text || fallback;
     } catch (error) {
-      console.error('Athena Response Error:', error);
+      console.error('Space Response Error:', error);
       return postType === 'flex'
         ? "Amazing! Keep celebrating your wins! 🎉"
         : "I'm here with you. Your feelings matter.";
@@ -161,7 +161,7 @@ class GeminiService {
   }
 
   /**
-   * Create a chat session for real-time conversation with Athena
+   * Create a chat session for real-time conversation with Space
    */
   createChatSession(): Chat {
     const ai = this.getAI();

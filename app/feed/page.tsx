@@ -66,7 +66,7 @@ export default function FeedPage() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const hasThinking = posts.some((p) => p.isAthenaThinking);
+      const hasThinking = posts.some((p) => p.isSpaceThinking);
       if (hasThinking) {
         fetchPosts();
       }
@@ -259,7 +259,7 @@ export default function FeedPage() {
               <button
                 onClick={() => router.push('/chat')}
                 className="p-2 text-stone hover:text-earth hover:bg-earth/5 rounded-xl transition-colors"
-                title="Chat with Athena"
+                title="Chat with Space"
               >
                 <MessageSquareHeart size={20} />
               </button>
@@ -478,7 +478,7 @@ export default function FeedPage() {
                     onClick={() => router.push('/chat')}
                     className="w-full text-left px-3 py-2.5 rounded-xl text-sm text-stone hover:bg-earth/5 hover:text-earth transition-colors"
                   >
-                    💬 Chat with Athena
+                    💬 Chat with Space
                   </button>
                 </div>
               </div>

@@ -5,7 +5,7 @@ import { geminiService } from '@/lib/gemini';
 // Store chat sessions in memory (in production, use Redis or similar)
 const chatSessions = new Map<string, ReturnType<typeof geminiService.createChatSession>>();
 
-// POST /api/chat - Send a message to Athena
+// POST /api/chat - Send a message to Space
 export async function POST(request: NextRequest) {
   try {
     const user = await getCurrentUser();

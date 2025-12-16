@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { credentialID, credentialPublicKey, counter } = verification.registrationInfo;
+    const { credential } = verification.registrationInfo;
 
     await dbConnect();
 
@@ -58,9 +58,9 @@ export async function POST(request: NextRequest) {
       fullTag,
       credentials: [
         {
-          credentialId: Buffer.from(credentialID, 'base64url'),
-          publicKey: Buffer.from(credentialPublicKey),
-          counter: counter,
+          credentialId: Buffer.from(credential.id, 'base64url'),
+          publicKey: Buffer.from(credential.publicKey),
+          counter: credential.counter,
           transports: response.response.transports || [],
         },
       ],
