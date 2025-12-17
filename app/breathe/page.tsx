@@ -33,6 +33,7 @@ export default function BreathePage() {
   // Breathing state
   const [isBreathing, setIsBreathing] = useState(false);
   const [phase, setPhase] = useState<BreathPhase>('rest');
+  const [prevPhase, setPrevPhase] = useState<BreathPhase>('rest'); // Track previous phase for hold
   const [countdown, setCountdown] = useState(0);
   const [cycles, setCycles] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -64,6 +65,7 @@ export default function BreathePage() {
   const stopBreathing = useCallback(() => {
     setIsBreathing(false);
     setPhase('rest');
+    setPrevPhase('rest');
     setCountdown(0);
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -83,6 +85,7 @@ export default function BreathePage() {
         if (prev <= 1) {
           // Move to next phase
           setPhase((currentPhase) => {
+            setPrevPhase(currentPhase); // Track what phase we came from
             switch (currentPhase) {
               case 'inhale':
                 setCountdown(BREATH_TIMING.hold);
@@ -123,9 +126,11 @@ export default function BreathePage() {
   const getCircleScale = () => {
     if (!isBreathing) return 0.7;
     switch (phase) {
-      case 'inhale': return 1;
-      case 'hold': return 1;
-      case 'exhale': return 0.7;
+      case 'inhale': return 1; // Growing to full
+      case 'hold': 
+        // Hold at whatever size we were at from the previous phase
+        return prevPhase === 'inhale' ? 1 : 0.7;
+      case 'exhale': return 0.7; // Shrinking to small
       default: return 0.7;
     }
   };
@@ -134,7 +139,7 @@ export default function BreathePage() {
     if (!isBreathing) return '0.5s';
     switch (phase) {
       case 'inhale': return `${BREATH_TIMING.inhale}s`;
-      case 'hold': return '0.1s'; // No animation during hold - instant
+      case 'hold': return '0s'; // No animation during hold - instant hold
       case 'exhale': return `${BREATH_TIMING.exhale}s`;
       default: return '0.5s';
     }
