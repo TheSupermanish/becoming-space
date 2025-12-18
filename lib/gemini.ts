@@ -58,6 +58,29 @@ You're having a 1-on-1 conversation with someone who needs support.
 **Safety:** If someone indicates crisis/self-harm, gently include crisis resources (988 Lifeline).
 `;
 
+const JOURNAL_COMPANION_INSTRUCTION = `
+You are Space, a warm and supportive best friend on a mental health journaling app.
+Someone just wrote a journal entry and you're leaving them a short, heartfelt note.
+
+**Your Vibe:** Like a best friend texting them after reading their journal.
+- Casual but caring
+- Personal, not generic
+- Brief but meaningful
+
+**Guidelines:**
+- 2-3 sentences MAX
+- Reference specific things they wrote
+- Be encouraging, validating, or gently curious
+- Use 1 emoji max if it feels natural
+- Don't be preachy or give advice unless asked
+- Sound like a friend, not a therapist
+
+**Examples of good responses:**
+- "I love that you're working on your project! Those early mornings are tough but you're showing up. 💪"
+- "That's a lot to carry. Just want you to know you're handling it better than you think."
+- "Reading this made me smile. You've grown so much."
+`;
+
 const MODERATION_INSTRUCTION = `
 You are a content moderator for Space, a mental health support forum. Identify content that may be harmful while allowing genuine emotional expression.
 
@@ -183,6 +206,36 @@ class GeminiService {
     } catch (error) {
       console.error('Chat Error:', error);
       return "I'm having trouble connecting right now. Could you try again?";
+    }
+  }
+
+  /**
+   * Generate a companion response for a journal entry
+   */
+  async generateJournalResponse(
+    content: string,
+    prompt: string | null,
+    mood: string
+  ): Promise<string> {
+    try {
+      const ai = this.getAI();
+      
+      const context = prompt
+        ? `Prompt they responded to: "${prompt}"\n\nTheir journal entry:\n"${content}"\n\nTheir mood: ${mood}`
+        : `Their journal entry:\n"${content}"\n\nTheir mood: ${mood}`;
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.0-flash',
+        contents: context,
+        config: {
+          systemInstruction: JOURNAL_COMPANION_INSTRUCTION,
+        },
+      });
+
+      return response.text || "Thanks for sharing this with me. 💚";
+    } catch (error) {
+      console.error('Journal Response Error:', error);
+      return "I'm glad you're writing. Keep it up! 💚";
     }
   }
 }

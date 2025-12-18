@@ -88,6 +88,7 @@ export interface IJournalEntry {
   content: string;
   mood?: 1 | 2 | 3 | 4 | 5;
   prompt?: string;
+  spaceResponse?: string; // AI companion response
   createdAt: Date;
   updatedAt?: Date;
 }

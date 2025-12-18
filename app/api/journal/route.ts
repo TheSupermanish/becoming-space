@@ -3,7 +3,29 @@ import dbConnect from '@/lib/db';
 import JournalEntry from '@/lib/models/JournalEntry';
 import User from '@/lib/models/User';
 import { getCurrentUser } from '@/lib/session';
-import { JOURNAL_PROMPTS } from '@/lib/types';
+import { JOURNAL_PROMPTS, MOOD_EMOJIS } from '@/lib/types';
+import { geminiService } from '@/lib/gemini';
+
+// Generate companion response in background
+async function generateCompanionResponse(
+  entryId: string,
+  content: string,
+  prompt: string | null,
+  mood: number | null
+) {
+  try {
+    const moodText = mood ? MOOD_EMOJIS[mood as keyof typeof MOOD_EMOJIS]?.label : 'unspecified';
+    
+    const response = await geminiService.generateJournalResponse(content, prompt, moodText);
+    
+    await dbConnect();
+    await JournalEntry.findByIdAndUpdate(entryId, {
+      spaceResponse: response,
+    });
+  } catch (error) {
+    console.error('Failed to generate companion response:', error);
+  }
+}
 
 // GET /api/journal - Get journal entries
 export async function GET(request: NextRequest) {
@@ -89,12 +111,16 @@ export async function POST(request: NextRequest) {
 
     await dbConnect();
 
+    // Create entry first
     const entry = await JournalEntry.create({
       userTag: user.fullTag,
       content: content.trim(),
       mood: mood || null,
       prompt: prompt || null,
     });
+
+    // Generate AI companion response in background
+    generateCompanionResponse(entry._id.toString(), content.trim(), prompt, mood);
 
     // Update user streak
     const userDoc = await User.findOne({ fullTag: user.fullTag });

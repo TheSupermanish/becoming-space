@@ -328,9 +328,6 @@ export default function JournalPage() {
                   <span className={`text-xs ${isSelected ? 'font-bold text-rose-600' : isToday ? 'font-bold text-rose-500' : 'text-stone'}`}>
                     {dayName}
                   </span>
-                  {hasEntry && dayEntries.length > 1 && (
-                    <span className="text-[10px] text-rose-400 -mt-1">+{dayEntries.length - 1}</span>
-                  )}
                 </button>
               );
             })}
@@ -391,15 +388,24 @@ export default function JournalPage() {
               const isExpanded = expandedEntry === entry._id.toString();
               const preview = entry.content.slice(0, 200);
               const hasMore = entry.content.length > 200;
-              const title = getEntryTitle(entry);
 
               return (
                 <Card key={entry._id.toString()} className="group">
-                  {/* Title & Actions */}
+                  {/* Title (Prompt) with Icon */}
                   <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-serif font-bold text-bark text-lg leading-snug flex-1 pr-4">
-                      {title}
-                    </h3>
+                    <div className="flex items-start gap-3 flex-1">
+                      <div className="w-8 h-8 bg-rose-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <PenLine size={16} className="text-rose-500" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-serif font-bold text-bark text-lg leading-snug">
+                          {entry.prompt || 'Journal Entry'}
+                        </h3>
+                        <div className="text-xs text-stone mt-1">
+                          {formatDate(entry.createdAt)} • {formatTime(entry.createdAt)}
+                        </div>
+                      </div>
+                    </div>
                     <div className="flex items-center gap-2">
                       {entry.mood && (
                         <span className="text-xl">{MOOD_EMOJIS[entry.mood as keyof typeof MOOD_EMOJIS].emoji}</span>
@@ -413,36 +419,39 @@ export default function JournalPage() {
                     </div>
                   </div>
 
-                  {/* Date & Time */}
-                  <div className="text-xs text-stone mb-3">
-                    {formatDate(entry.createdAt)} • {formatTime(entry.createdAt)}
-                  </div>
-
-                  {/* Prompt if exists */}
-                  {entry.prompt && (
-                    <div className="text-sm text-rose-500 italic mb-3 bg-rose-50 px-3 py-2 rounded-lg">
-                      "{entry.prompt}"
-                    </div>
-                  )}
-
                   {/* Content */}
-                  <p className="text-bark whitespace-pre-wrap text-[15px] leading-relaxed">
-                    {isExpanded ? entry.content : preview}
-                    {!isExpanded && hasMore && '...'}
-                  </p>
+                  <div className="ml-11">
+                    <p className="text-bark whitespace-pre-wrap text-[15px] leading-relaxed">
+                      {isExpanded ? entry.content : preview}
+                      {!isExpanded && hasMore && '...'}
+                    </p>
 
-                  {hasMore && (
-                    <button
-                      onClick={() => setExpandedEntry(isExpanded ? null : entry._id.toString())}
-                      className="text-rose-500 text-sm font-medium mt-3 flex items-center gap-1 hover:underline"
-                    >
-                      {isExpanded ? (
-                        <>Show less <ChevronUp size={14} /></>
-                      ) : (
-                        <>Read more <ChevronDown size={14} /></>
-                      )}
-                    </button>
-                  )}
+                    {hasMore && (
+                      <button
+                        onClick={() => setExpandedEntry(isExpanded ? null : entry._id.toString())}
+                        className="text-rose-500 text-sm font-medium mt-2 flex items-center gap-1 hover:underline"
+                      >
+                        {isExpanded ? (
+                          <>Show less <ChevronUp size={14} /></>
+                        ) : (
+                          <>Read more <ChevronDown size={14} /></>
+                        )}
+                      </button>
+                    )}
+
+                    {/* Space's Response */}
+                    {entry.spaceResponse && (
+                      <div className="mt-4 p-3 bg-sage/10 rounded-xl border border-sage/20">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Sparkles size={14} className="text-sage" />
+                          <span className="text-xs font-medium text-sage">Space</span>
+                        </div>
+                        <p className="text-sm text-bark/80 leading-relaxed">
+                          {entry.spaceResponse}
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </Card>
               );
             })}

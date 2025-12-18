@@ -25,6 +25,10 @@ const JournalEntrySchema = new Schema<JournalEntryDocument>(
       type: String,
       default: null,
     },
+    spaceResponse: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,
