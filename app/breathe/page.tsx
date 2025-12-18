@@ -167,8 +167,14 @@ export default function BreathePage() {
   const StepIcon = currentStep?.icon || Eye;
 
   return (
-    <div className="min-h-screen pb-24 bg-gradient-to-b from-blue-50/50 to-cream">
-      <div className="max-w-lg mx-auto px-4 pt-6">
+    <div className="min-h-screen pb-24 bg-cream">
+      {/* Ambient background */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-200/30 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '8s' }} />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-cyan-200/30 rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '6s', animationDelay: '2s' }} />
+      </div>
+
+      <div className="max-w-2xl mx-auto px-4 pt-6 relative z-10">
         {/* Back Button */}
         <button
           onClick={() => router.push('/feed')}
@@ -179,8 +185,8 @@ export default function BreathePage() {
         </button>
 
         {/* Header */}
-        <div className="text-center mb-6">
-          <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-200">
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-200/50">
             <Wind size={32} className="text-white" />
           </div>
           <h1 className="text-2xl font-serif font-bold text-bark mb-2">
@@ -190,11 +196,11 @@ export default function BreathePage() {
         </div>
 
         {/* Exercise Toggle */}
-        <div className="flex justify-center mb-6">
-          <div className="bg-white rounded-2xl p-1.5 shadow-soft inline-flex gap-1">
+        <div className="flex justify-center mb-8">
+          <div className="bg-white/80 backdrop-blur-xl rounded-2xl p-1.5 shadow-soft border border-sand/30 inline-flex gap-1">
             <button
               onClick={() => setExercise('breathing')}
-              className={`px-5 py-2.5 rounded-xl font-medium text-sm transition-all ${
+              className={`px-6 py-2.5 rounded-xl font-medium text-sm transition-all ${
                 exercise === 'breathing'
                   ? 'bg-gradient-to-r from-blue-400 to-cyan-400 text-white shadow-md'
                   : 'text-stone hover:text-blue-500 hover:bg-blue-50'
@@ -204,7 +210,7 @@ export default function BreathePage() {
             </button>
             <button
               onClick={() => setExercise('grounding')}
-              className={`px-5 py-2.5 rounded-xl font-medium text-sm transition-all ${
+              className={`px-6 py-2.5 rounded-xl font-medium text-sm transition-all ${
                 exercise === 'grounding'
                   ? 'bg-gradient-to-r from-purple-400 to-pink-400 text-white shadow-md'
                   : 'text-stone hover:text-purple-500 hover:bg-purple-50'
@@ -216,24 +222,67 @@ export default function BreathePage() {
         </div>
 
         {exercise === 'breathing' ? (
-          <Card className="text-center">
+          <Card className="text-center bg-white/80 backdrop-blur-xl border border-sand/30">
             {/* Breathing Circle */}
-            <div className="relative w-64 h-64 mx-auto mb-8">
-              {/* Background ring */}
-              <div className="absolute inset-0 rounded-full border-4 border-blue-100" />
-              
-              {/* Animated circle */}
-              <div
-                className={`absolute inset-4 rounded-full bg-gradient-to-br from-blue-300 to-cyan-300 transition-transform duration-1000 ease-in-out flex items-center justify-center ${getCircleSize()}`}
+            <div className="relative w-72 h-72 mx-auto mb-8">
+              {/* Outer glow ring */}
+              <div 
+                className={`absolute inset-0 rounded-full transition-all ${
+                  isBreathing ? 'opacity-100' : 'opacity-30'
+                }`}
                 style={{
+                  background: 'radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%)',
                   transitionDuration: isBreathing ? `${BREATH_TIMING[phase]}s` : '0.3s',
+                  transform: phase === 'inhale' || phase === 'hold' ? 'scale(1.1)' : 'scale(1)',
+                }}
+              />
+              
+              {/* Background ring with pulse */}
+              <div className={`absolute inset-4 rounded-full border-[3px] border-blue-200/50 ${isBreathing ? 'animate-pulse' : ''}`} 
+                style={{ animationDuration: '2s' }}
+              />
+              
+              {/* Progress ring */}
+              <svg className="absolute inset-4 w-[calc(100%-2rem)] h-[calc(100%-2rem)] -rotate-90">
+                <circle
+                  cx="50%"
+                  cy="50%"
+                  r="48%"
+                  fill="none"
+                  stroke="url(#breathGradient)"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeDasharray="302"
+                  strokeDashoffset={isBreathing ? (302 - (302 * (1 - countdown / BREATH_TIMING[phase]))) : 302}
+                  className="transition-all ease-linear"
+                  style={{ transitionDuration: '1s' }}
+                />
+                <defs>
+                  <linearGradient id="breathGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#38bdf8" />
+                    <stop offset="100%" stopColor="#22d3ee" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              
+              {/* Animated breathing circle */}
+              <div
+                className={`absolute inset-8 rounded-full bg-gradient-to-br from-blue-400 via-cyan-400 to-teal-400 flex items-center justify-center shadow-xl transition-all ease-[cubic-bezier(0.4,0,0.2,1)] ${getCircleSize()}`}
+                style={{
+                  transitionDuration: isBreathing ? `${BREATH_TIMING[phase]}s` : '0.5s',
+                  boxShadow: isBreathing && (phase === 'inhale' || phase === 'hold') 
+                    ? '0 0 60px rgba(56, 189, 248, 0.5), 0 0 100px rgba(34, 211, 238, 0.3)' 
+                    : '0 10px 40px rgba(56, 189, 248, 0.3)',
                 }}
               >
-                <div className="text-center text-white">
-                  <div className="text-5xl font-bold mb-1">
-                    {isBreathing ? countdown : '•'}
+                {/* Inner glow */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-white/10 to-white/30" />
+                
+                <div className="text-center text-white relative z-10">
+                  <div className="text-6xl font-bold mb-2 drop-shadow-lg" style={{ fontVariantNumeric: 'tabular-nums' }}>
+                    {isBreathing ? countdown : '∞'}
                   </div>
-                  <div className="text-sm font-medium opacity-90">
+                  <div className="text-sm font-semibold tracking-wide uppercase opacity-90">
                     {getBreathingText()}
                   </div>
                 </div>
@@ -241,20 +290,21 @@ export default function BreathePage() {
             </div>
 
             {/* Controls */}
-            <div className="flex justify-center gap-3 mb-6">
+            <div className="flex justify-center gap-4 mb-8">
               {!isBreathing ? (
                 <Button
                   onClick={startBreathing}
                   leftIcon={<Play size={18} />}
-                  className="bg-gradient-to-r from-blue-400 to-cyan-400 hover:from-blue-500 hover:to-cyan-500"
+                  className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 shadow-lg shadow-blue-200/50 px-8"
                 >
-                  Start
+                  Begin
                 </Button>
               ) : (
                 <Button
                   onClick={stopBreathing}
                   leftIcon={<Pause size={18} />}
                   variant="secondary"
+                  className="px-8"
                 >
                   Pause
                 </Button>
@@ -269,28 +319,38 @@ export default function BreathePage() {
             </div>
 
             {/* Stats */}
-            <div className="flex justify-center gap-6 text-sm">
+            <div className="flex justify-center gap-10 text-sm">
               <div className="text-center">
-                <div className="text-2xl font-bold text-blue-500">{cycles}</div>
-                <div className="text-stone">Cycles</div>
+                <div className="text-3xl font-bold bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">{cycles}</div>
+                <div className="text-stone text-xs uppercase tracking-wider mt-1">Cycles</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-cyan-500">
+                <div className="text-3xl font-bold bg-gradient-to-r from-cyan-500 to-teal-500 bg-clip-text text-transparent">
                   {Math.floor(cycles * 16 / 60)}:{String(cycles * 16 % 60).padStart(2, '0')}
                 </div>
-                <div className="text-stone">Time</div>
+                <div className="text-stone text-xs uppercase tracking-wider mt-1">Time</div>
               </div>
             </div>
 
             {/* Pattern Guide */}
-            <div className="mt-6 pt-6 border-t border-sand/50">
-              <p className="text-xs text-stone">
-                Pattern: <span className="font-medium">4s inhale</span> → <span className="font-medium">4s hold</span> → <span className="font-medium">6s exhale</span>
-              </p>
+            <div className="mt-8 pt-6 border-t border-sand/30">
+              <div className="flex justify-center gap-4 text-xs">
+                <span className={`px-3 py-1.5 rounded-full transition-all ${phase === 'inhale' ? 'bg-blue-100 text-blue-600 font-semibold' : 'text-stone'}`}>
+                  4s inhale
+                </span>
+                <span className="text-stone/30">→</span>
+                <span className={`px-3 py-1.5 rounded-full transition-all ${phase === 'hold' ? 'bg-cyan-100 text-cyan-600 font-semibold' : 'text-stone'}`}>
+                  4s hold
+                </span>
+                <span className="text-stone/30">→</span>
+                <span className={`px-3 py-1.5 rounded-full transition-all ${phase === 'exhale' ? 'bg-teal-100 text-teal-600 font-semibold' : 'text-stone'}`}>
+                  6s exhale
+                </span>
+              </div>
             </div>
           </Card>
         ) : (
-          <Card>
+          <Card className="bg-white/80 backdrop-blur-xl border border-sand/30">
             {groundingComplete ? (
               <div className="text-center py-8">
                 <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-green-400 to-emerald-400 rounded-full flex items-center justify-center animate-scale-in">
@@ -377,8 +437,8 @@ export default function BreathePage() {
         )}
 
         {/* Tips */}
-        <div className="mt-6 p-4 bg-white/60 rounded-2xl">
-          <p className="text-xs text-stone text-center">
+        <div className="mt-6 p-4 bg-white/60 backdrop-blur-xl rounded-2xl border border-sand/20">
+          <p className="text-xs text-stone text-center leading-relaxed">
             {exercise === 'breathing'
               ? '💡 Try 3-5 cycles when you feel anxious. Deep breathing activates your parasympathetic nervous system.'
               : '💡 This technique helps ground you in the present moment when you feel overwhelmed or anxious.'}
