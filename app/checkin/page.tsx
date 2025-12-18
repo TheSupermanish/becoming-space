@@ -33,20 +33,26 @@ export default function CheckinPage() {
 
   useEffect(() => {
     if (user) {
-      fetch('/api/mood?days=7')
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.success) {
-            setMoodHistory(data.data.entries);
-            setHasCheckedIn(data.data.hasCheckedInToday);
-            if (data.data.todayEntry) {
-              setSelectedMood(data.data.todayEntry.mood);
-              setNote(data.data.todayEntry.note || '');
-            }
-          }
-        });
+      fetchMoodHistory();
     }
   }, [user]);
+
+  const fetchMoodHistory = async () => {
+    try {
+      const res = await fetch('/api/mood?days=7');
+      const data = await res.json();
+      if (data.success) {
+        setMoodHistory(data.data.entries);
+        setHasCheckedIn(data.data.hasCheckedInToday);
+        if (data.data.todayEntry) {
+          setSelectedMood(data.data.todayEntry.mood);
+          setNote(data.data.todayEntry.note || '');
+        }
+      }
+    } catch (error) {
+      console.error('Failed to fetch mood history:', error);
+    }
+  };
 
   const handleSubmit = async () => {
     if (!selectedMood) return;
@@ -62,6 +68,8 @@ export default function CheckinPage() {
       if (data.success) {
         setHasCheckedIn(true);
         setShowSuccess(true);
+        // Refresh mood history to update "This Week" section
+        await fetchMoodHistory();
         setTimeout(() => setShowSuccess(false), 3000);
       }
     } catch (error) {
