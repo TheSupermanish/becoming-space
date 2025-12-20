@@ -19,6 +19,7 @@ export default function JournalPage() {
   const [currentPrompt, setCurrentPrompt] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [expandedEntry, setExpandedEntry] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   useEffect(() => {
     fetch('/api/auth/me')
@@ -125,6 +126,34 @@ export default function JournalPage() {
       setCurrentPrompt(data.data.suggestedPrompt);
     }
   };
+
+  const getLast7Days = () => {
+    const days = [];
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      days.push(date);
+    }
+    return days;
+  };
+
+  const getEntriesForDate = (date: Date) => {
+    const dateStr = date.toDateString();
+    return entries.filter(
+      (entry) => new Date(entry.createdAt).toDateString() === dateStr
+    );
+  };
+
+  const getEntryTitle = (entry: IJournalEntry) => {
+    // Get first line or first 50 chars as title
+    const firstLine = entry.content.split('\n')[0].trim();
+    if (firstLine.length <= 60) return firstLine;
+    return firstLine.slice(0, 57) + '...';
+  };
+
+  const filteredEntries = selectedDate
+    ? getEntriesForDate(selectedDate)
+    : entries;
 
   if (!user) {
     return (
@@ -254,6 +283,60 @@ export default function JournalPage() {
           </Card>
         )}
 
+        {/* This Week Calendar */}
+        <Card className="mb-6">
+          <div className="flex items-center gap-2 mb-4">
+            <Calendar size={18} className="text-rose-500" />
+            <h3 className="font-semibold text-bark">This Week</h3>
+          </div>
+          
+          <div className="flex justify-between items-end gap-2">
+            {getLast7Days().map((date, idx) => {
+              const dayEntries = getEntriesForDate(date);
+              const hasEntry = dayEntries.length > 0;
+              const isToday = date.toDateString() === new Date().toDateString();
+              const isSelected = selectedDate?.toDateString() === date.toDateString();
+              const dayName = date.toLocaleDateString('en-US', { weekday: 'short' }).slice(0, 2);
+              
+              return (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedDate(isSelected ? null : date)}
+                  className={`flex flex-col items-center gap-2 transition-all ${isSelected ? 'scale-110' : ''}`}
+                >
+                  <div
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+                      isSelected
+                        ? 'bg-rose-500 shadow-lg shadow-rose-200'
+                        : hasEntry
+                        ? 'bg-rose-100 hover:bg-rose-200'
+                        : isToday
+                        ? 'bg-sand border-2 border-dashed border-rose-300 hover:bg-rose-50'
+                        : 'bg-sand/50 hover:bg-sand'
+                    }`}
+                  >
+                    {hasEntry ? (
+                      <span className={`text-lg ${isSelected ? '' : ''}`}>
+                        {dayEntries[0].mood ? MOOD_EMOJIS[dayEntries[0].mood as keyof typeof MOOD_EMOJIS].emoji : '📝'}
+                      </span>
+                    ) : isToday ? (
+                      <span className="text-stone/40 text-lg">?</span>
+                    ) : (
+                      <span className="text-stone/20">-</span>
+                    )}
+                  </div>
+                  <span className={`text-xs ${isSelected ? 'font-bold text-rose-600' : isToday ? 'font-bold text-rose-500' : 'text-stone'}`}>
+                    {dayName}
+                  </span>
+                  {hasEntry && dayEntries.length > 1 && (
+                    <span className="text-[10px] text-rose-400 -mt-1">+{dayEntries.length - 1}</span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </Card>
+
         {/* Entries */}
         {isLoading ? (
           <div className="space-y-4">
@@ -270,47 +353,76 @@ export default function JournalPage() {
               </div>
             ))}
           </div>
-        ) : entries.length === 0 ? (
+        ) : filteredEntries.length === 0 ? (
           <Card className="text-center py-12">
             <BookOpen size={48} className="mx-auto mb-4 text-stone/30" />
-            <p className="text-stone font-medium mb-2">No journal entries yet</p>
-            <p className="text-sm text-stone/60">Start writing to see your entries here</p>
+            <p className="text-stone font-medium mb-2">
+              {selectedDate ? `No entries for ${formatDate(selectedDate)}` : 'No journal entries yet'}
+            </p>
+            <p className="text-sm text-stone/60">
+              {selectedDate ? 'Select another day or start writing' : 'Start writing to see your entries here'}
+            </p>
+            {selectedDate && (
+              <Button
+                variant="ghost"
+                onClick={() => setSelectedDate(null)}
+                className="mt-4"
+              >
+                Show all entries
+              </Button>
+            )}
           </Card>
         ) : (
           <div className="space-y-4">
-            {entries.map((entry) => {
+            {selectedDate && (
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-medium text-stone">
+                  Entries for {formatDate(selectedDate)}
+                </h3>
+                <button
+                  onClick={() => setSelectedDate(null)}
+                  className="text-xs text-rose-500 hover:underline"
+                >
+                  Show all
+                </button>
+              </div>
+            )}
+            {filteredEntries.map((entry) => {
               const isExpanded = expandedEntry === entry._id.toString();
-              const preview = entry.content.slice(0, 150);
-              const hasMore = entry.content.length > 150;
+              const preview = entry.content.slice(0, 200);
+              const hasMore = entry.content.length > 200;
+              const title = getEntryTitle(entry);
 
               return (
                 <Card key={entry._id.toString()} className="group">
-                  {/* Header */}
-                  <div className="flex justify-between items-start mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-rose-100 rounded-xl flex items-center justify-center">
-                        {entry.mood ? (
-                          <span className="text-xl">{MOOD_EMOJIS[entry.mood as keyof typeof MOOD_EMOJIS].emoji}</span>
-                        ) : (
-                          <Calendar size={18} className="text-rose-400" />
-                        )}
-                      </div>
-                      <div>
-                        <div className="font-medium text-bark text-sm">{formatDate(entry.createdAt)}</div>
-                        <div className="text-xs text-stone">{formatTime(entry.createdAt)}</div>
-                      </div>
+                  {/* Title & Actions */}
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="font-serif font-bold text-bark text-lg leading-snug flex-1 pr-4">
+                      {title}
+                    </h3>
+                    <div className="flex items-center gap-2">
+                      {entry.mood && (
+                        <span className="text-xl">{MOOD_EMOJIS[entry.mood as keyof typeof MOOD_EMOJIS].emoji}</span>
+                      )}
+                      <button
+                        onClick={() => handleDelete(entry._id.toString())}
+                        className="opacity-0 group-hover:opacity-100 p-1.5 text-stone/40 hover:text-red-500 transition-all"
+                      >
+                        <Trash2 size={16} />
+                      </button>
                     </div>
-                    <button
-                      onClick={() => handleDelete(entry._id.toString())}
-                      className="opacity-0 group-hover:opacity-100 p-1.5 text-stone/40 hover:text-red-500 transition-all"
-                    >
-                      <Trash2 size={16} />
-                    </button>
+                  </div>
+
+                  {/* Date & Time */}
+                  <div className="text-xs text-stone mb-3">
+                    {formatDate(entry.createdAt)} • {formatTime(entry.createdAt)}
                   </div>
 
                   {/* Prompt if exists */}
                   {entry.prompt && (
-                    <div className="text-xs text-rose-500 italic mb-2">{entry.prompt}</div>
+                    <div className="text-sm text-rose-500 italic mb-3 bg-rose-50 px-3 py-2 rounded-lg">
+                      "{entry.prompt}"
+                    </div>
                   )}
 
                   {/* Content */}
@@ -322,7 +434,7 @@ export default function JournalPage() {
                   {hasMore && (
                     <button
                       onClick={() => setExpandedEntry(isExpanded ? null : entry._id.toString())}
-                      className="text-rose-500 text-sm font-medium mt-2 flex items-center gap-1 hover:underline"
+                      className="text-rose-500 text-sm font-medium mt-3 flex items-center gap-1 hover:underline"
                     >
                       {isExpanded ? (
                         <>Show less <ChevronUp size={14} /></>
