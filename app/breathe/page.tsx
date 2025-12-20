@@ -120,13 +120,23 @@ export default function BreathePage() {
     }
   };
 
-  const getCircleSize = () => {
-    if (!isBreathing) return 'scale-75';
+  const getCircleScale = () => {
+    if (!isBreathing) return 0.7;
     switch (phase) {
-      case 'inhale': return 'scale-100';
-      case 'hold': return 'scale-100';
-      case 'exhale': return 'scale-75';
-      default: return 'scale-75';
+      case 'inhale': return 1;
+      case 'hold': return 1;
+      case 'exhale': return 0.7;
+      default: return 0.7;
+    }
+  };
+
+  const getTransitionDuration = () => {
+    if (!isBreathing) return '0.5s';
+    switch (phase) {
+      case 'inhale': return `${BREATH_TIMING.inhale}s`;
+      case 'hold': return '0.1s'; // No animation during hold - instant
+      case 'exhale': return `${BREATH_TIMING.exhale}s`;
+      default: return '0.5s';
     }
   };
 
@@ -227,13 +237,14 @@ export default function BreathePage() {
             <div className="relative w-72 h-72 mx-auto mb-8">
               {/* Outer glow ring */}
               <div 
-                className={`absolute inset-0 rounded-full transition-all ${
+                className={`absolute inset-0 rounded-full ${
                   isBreathing ? 'opacity-100' : 'opacity-30'
                 }`}
                 style={{
                   background: 'radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%)',
-                  transitionDuration: isBreathing ? `${BREATH_TIMING[phase]}s` : '0.3s',
-                  transform: phase === 'inhale' || phase === 'hold' ? 'scale(1.1)' : 'scale(1)',
+                  transitionProperty: 'transform, opacity',
+                  transitionDuration: getTransitionDuration(),
+                  transform: `scale(${getCircleScale() * 1.15})`,
                 }}
               />
               
@@ -242,9 +253,12 @@ export default function BreathePage() {
               
               {/* Animated breathing circle */}
               <div
-                className={`absolute inset-8 rounded-full bg-gradient-to-br from-blue-400 via-cyan-400 to-teal-400 flex items-center justify-center shadow-xl transition-all ease-[cubic-bezier(0.4,0,0.2,1)] ${getCircleSize()}`}
+                className="absolute inset-8 rounded-full bg-gradient-to-br from-blue-400 via-cyan-400 to-teal-400 flex items-center justify-center shadow-xl ease-[cubic-bezier(0.4,0,0.2,1)]"
                 style={{
-                  transitionDuration: isBreathing ? `${BREATH_TIMING[phase]}s` : '0.5s',
+                  transform: `scale(${getCircleScale()})`,
+                  transitionProperty: 'transform, box-shadow',
+                  transitionDuration: getTransitionDuration(),
+                  transitionTimingFunction: phase === 'hold' ? 'linear' : 'cubic-bezier(0.4, 0, 0.2, 1)',
                   boxShadow: isBreathing && (phase === 'inhale' || phase === 'hold') 
                     ? '0 0 60px rgba(56, 189, 248, 0.5), 0 0 100px rgba(34, 211, 238, 0.3)' 
                     : '0 10px 40px rgba(56, 189, 248, 0.3)',
@@ -309,15 +323,15 @@ export default function BreathePage() {
 
             {/* Pattern Guide */}
             <div className="mt-8 pt-6 border-t border-sand/30">
-              <div className="flex justify-center gap-4 text-xs">
+              <div className="flex justify-center items-center gap-3 text-xs">
                 <span className={`px-3 py-1.5 rounded-full transition-all ${phase === 'inhale' ? 'bg-blue-100 text-blue-600 font-semibold' : 'text-stone'}`}>
                   4s inhale
                 </span>
-                <span className="text-stone/30">→</span>
+                <span className="text-stone/30 flex items-center">→</span>
                 <span className={`px-3 py-1.5 rounded-full transition-all ${phase === 'hold' ? 'bg-cyan-100 text-cyan-600 font-semibold' : 'text-stone'}`}>
                   4s hold
                 </span>
-                <span className="text-stone/30">→</span>
+                <span className="text-stone/30 flex items-center">→</span>
                 <span className={`px-3 py-1.5 rounded-full transition-all ${phase === 'exhale' ? 'bg-teal-100 text-teal-600 font-semibold' : 'text-stone'}`}>
                   6s exhale
                 </span>
