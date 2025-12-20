@@ -114,59 +114,63 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="min-h-screen bg-cream pb-20 lg:pb-0">
+    <div className="min-h-screen bg-cream">
       {/* Container */}
-      <div className="max-w-2xl mx-auto flex flex-col h-screen">
-        {/* Header */}
-        <header className="bg-white border-b border-sand/50 px-4 py-3 flex items-center justify-between sticky top-0 z-10">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => router.push('/feed')}
-              className="p-2 hover:bg-sand/50 rounded-xl transition-colors text-stone"
-            >
-              <ArrowLeft size={20} />
-            </button>
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <div className="w-10 h-10 bg-sage/20 rounded-full flex items-center justify-center">
-                  <Sparkles className="text-sage" size={18} />
+      <div className="max-w-2xl mx-auto flex flex-col h-screen relative">
+        {/* Floating Header */}
+        <header className="fixed top-0 left-0 right-0 z-20 px-4 pt-3">
+          <div className="max-w-2xl mx-auto">
+            <div className="bg-white/95 backdrop-blur-xl shadow-soft border border-sand/30 rounded-2xl px-4 py-3 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => router.push('/feed')}
+                  className="p-2 hover:bg-sand/50 rounded-xl transition-colors text-stone"
+                >
+                  <ArrowLeft size={20} />
+                </button>
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <div className="w-10 h-10 bg-sage/20 rounded-full flex items-center justify-center">
+                      <Sparkles className="text-sage" size={18} />
+                    </div>
+                    <div className="absolute bottom-0 right-0 w-3 h-3 bg-sage border-2 border-white rounded-full" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-bark text-sm">Space</h3>
+                    <p className="text-xs text-stone">AI Companion • Always here</p>
+                  </div>
                 </div>
-                <div className="absolute bottom-0 right-0 w-3 h-3 bg-sage border-2 border-white rounded-full" />
               </div>
-              <div>
-                <h3 className="font-bold text-bark text-sm">Space</h3>
-                <p className="text-xs text-stone">AI Therapist • Always here</p>
+
+              <div className="relative">
+                <button
+                  onClick={() => setShowMenu(!showMenu)}
+                  className="p-2 hover:bg-sand/50 rounded-xl transition-colors text-stone"
+                >
+                  <MoreHorizontal size={20} />
+                </button>
+                
+                {showMenu && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
+                    <div className="absolute right-0 top-12 bg-white rounded-xl shadow-warm border border-sand/50 py-1 z-50 animate-scale-in min-w-[180px]">
+                      <button
+                        onClick={handleClearChat}
+                        className="flex items-center gap-2 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 w-full transition-colors"
+                      >
+                        <Trash2 size={16} />
+                        Clear conversation
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
-
-          <div className="relative">
-            <button
-              onClick={() => setShowMenu(!showMenu)}
-              className="p-2 hover:bg-sand/50 rounded-xl transition-colors text-stone"
-            >
-              <MoreHorizontal size={20} />
-            </button>
-            
-            {showMenu && (
-              <>
-                <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
-                <div className="absolute right-0 top-12 bg-white rounded-xl shadow-warm border border-sand/50 py-1 z-50 animate-scale-in min-w-[180px]">
-                  <button
-                    onClick={handleClearChat}
-                    className="flex items-center gap-2 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 w-full transition-colors"
-                  >
-                    <Trash2 size={16} />
-                    Clear conversation
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
         </header>
 
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4 scrollbar-hide">
+        {/* Messages - with top padding for floating header */}
+        <div className="flex-1 overflow-y-auto px-4 pt-24 pb-6 space-y-4 scrollbar-hide">
           {messages.map((msg) => {
             const isUser = msg.role === 'user';
             return (
@@ -222,8 +226,8 @@ export default function ChatPage() {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input - Fixed at bottom, above nav */}
-        <div className="sticky bottom-20 lg:bottom-0 bg-cream px-4 py-3">
+        {/* Input - Fixed at bottom, above nav with proper spacing */}
+        <div className="sticky bottom-0 bg-cream/95 backdrop-blur-xl px-4 py-3 pb-24 lg:pb-4 border-t border-sand/30">
           <form onSubmit={handleSend} className="flex items-center gap-3">
             <div className="flex-1 relative">
               <input
@@ -231,13 +235,13 @@ export default function ChatPage() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Share how you're feeling..."
-                className="w-full bg-white border border-sand rounded-xl px-4 py-3 text-bark focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage/50 placeholder-stone/40 text-[15px]"
+                className="w-full bg-white border border-sand rounded-xl px-4 py-3 text-bark focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage/50 placeholder-stone/40 text-[15px] shadow-sm"
               />
             </div>
             <button
               type="submit"
               disabled={!input.trim() || isTyping}
-              className="p-3 bg-sage text-white rounded-xl hover:bg-sage-dark disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm"
+              className="p-3 bg-sage text-white rounded-xl hover:bg-sage-dark disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-soft"
             >
               <Send size={18} />
             </button>
