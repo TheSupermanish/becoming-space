@@ -15,12 +15,16 @@ export interface UserStreak {
   lastActiveDate?: Date;
 }
 
+// User roles
+export type UserRole = 'user' | 'admin';
+
 // User - Anonymous with passkey
 export interface IUser {
   _id: Types.ObjectId;
   username: string;
   discriminator: string;
   fullTag: string;
+  role: UserRole;
   credentials: WebAuthnCredential[];
   currentChallenge?: string;
   streak: UserStreak;
@@ -97,6 +101,26 @@ export interface IJournalEntry {
 export interface SessionUser {
   fullTag: string;
   username: string;
+  role: UserRole;
+}
+
+// Blog post (admin-only creation)
+export interface IBlog {
+  _id: Types.ObjectId;
+  title: string;
+  slug: string;
+  content: string; // Markdown/HTML content
+  excerpt: string;
+  coverImage?: string;
+  authorTag: string;
+  authorName: string;
+  tags: string[];
+  isPublished: boolean;
+  publishedAt?: Date;
+  readTime: number; // in minutes
+  views: number;
+  createdAt: Date;
+  updatedAt?: Date;
 }
 
 // Chat message

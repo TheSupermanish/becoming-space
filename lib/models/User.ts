@@ -66,6 +66,11 @@ const UserSchema = new Schema<UserDocument>(
       unique: true,
       index: true,
     },
+    role: {
+      type: String,
+      enum: ['user', 'admin'],
+      default: 'user',
+    },
     credentials: {
       type: [WebAuthnCredentialSchema],
       default: [],

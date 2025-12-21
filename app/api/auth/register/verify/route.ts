@@ -73,6 +73,7 @@ export async function POST(request: NextRequest) {
     await setSessionUser({
       fullTag: newUser.fullTag,
       username: newUser.username,
+      role: newUser.role || 'user',
     });
 
     return NextResponse.json({
@@ -80,6 +81,7 @@ export async function POST(request: NextRequest) {
       data: {
         fullTag: newUser.fullTag,
         username: newUser.username,
+        role: newUser.role || 'user',
       },
     });
   } catch (error) {

@@ -2,11 +2,11 @@
 
 import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { Home, PenLine, Wind, BookOpen, Sparkles } from 'lucide-react';
+import { Home, FileText, Wind, BookOpen, Sparkles } from 'lucide-react';
 
 const NAV_ITEMS = [
   { href: '/feed', icon: Home, label: 'Feed' },
-  { href: '/create', icon: PenLine, label: 'Post' },
+  { href: '/blog', icon: FileText, label: 'Blog' },
   { href: '/breathe', icon: Wind, label: 'Breathe' },
   { href: '/journal', icon: BookOpen, label: 'Journal' },
   { href: '/checkin', icon: Sparkles, label: 'Check-in' },
@@ -16,8 +16,13 @@ export const BottomNav: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
 
-  // Don't show on login page
-  if (pathname === '/login' || pathname === '/') {
+  // Don't show on login page or blog editor pages
+  if (
+    pathname === '/login' ||
+    pathname === '/' ||
+    pathname === '/blog/new' ||
+    pathname.startsWith('/blog/edit/')
+  ) {
     return null;
   }
 
@@ -26,7 +31,9 @@ export const BottomNav: React.FC = () => {
       <div className="max-w-lg mx-auto">
         <div className="flex justify-around items-center py-1.5">
           {NAV_ITEMS.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive = item.href === '/blog'
+              ? pathname.startsWith('/blog')
+              : pathname === item.href;
             const Icon = item.icon;
             
             return (
