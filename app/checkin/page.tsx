@@ -110,7 +110,7 @@ export default function CheckinPage() {
 
   return (
     <div className="min-h-screen pb-24 bg-gradient-to-b from-purple-50/30 to-cream">
-      <div className="max-w-lg mx-auto px-4 pt-6">
+      <div className="max-w-2xl mx-auto px-4 pt-6">
         {/* Back Button */}
         <button
           onClick={() => router.push('/feed')}
