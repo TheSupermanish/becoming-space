@@ -112,10 +112,10 @@ export default function BlogListPage() {
           <div className="space-y-4">
             {blogs.map((blog) => (
               <Link key={blog._id.toString()} href={`/blog/${blog.slug}`}>
-                <Card className="group hover:shadow-warm transition-all cursor-pointer overflow-hidden p-0">
+                <Card className="group hover:shadow-warm transition-all cursor-pointer overflow-hidden p-4">
                   {/* Cover Image */}
                   {blog.coverImage && (
-                    <div className="w-full h-40 overflow-hidden">
+                    <div className="w-full h-48 overflow-hidden rounded-xl mb-4 -mt-1">
                       <img
                         src={blog.coverImage}
                         alt={blog.title}
@@ -124,7 +124,7 @@ export default function BlogListPage() {
                     </div>
                   )}
                   
-                  <div className="p-5">
+                  <div className="px-1">
                     {/* Draft Badge */}
                     {!blog.isPublished && (
                       <span className="inline-block px-2 py-0.5 bg-amber-100 text-amber-600 text-xs font-medium rounded-full mb-3">
