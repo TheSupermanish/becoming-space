@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogOut, Leaf, MessageSquareHeart, Search, RefreshCw, Wind, Flame, X, Sparkles, Shield } from 'lucide-react';
+import { LogOut, Leaf, MessageSquareHeart, Search, RefreshCw, Wind, Flame, X, Sparkles, Shield, User } from 'lucide-react';
 import { PostCard, StreakBadge } from '@/components/features';
 import { Button } from '@/components/ui/Button';
 import { Avatar } from '@/components/ui/Avatar';
@@ -266,17 +266,21 @@ export default function FeedPage() {
 
               <StreakBadge />
 
-              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-sand/50 rounded-full">
+              <button
+                onClick={() => router.push('/profile')}
+                className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-sand/50 hover:bg-earth/10 rounded-full transition-colors"
+                title="View Profile"
+              >
                 <div className="w-2 h-2 rounded-full bg-sage" />
                 <span className="text-xs text-bark font-medium">{user.fullTag}</span>
-              </div>
+              </button>
 
               <button
-                onClick={handleLogout}
-                className="p-2 text-stone hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors"
-                title="Logout"
+                onClick={() => router.push('/profile')}
+                className="sm:hidden p-2 text-stone hover:text-earth hover:bg-earth/5 rounded-xl transition-colors"
+                title="Profile"
               >
-                <LogOut size={18} />
+                <User size={20} />
               </button>
             </div>
           </div>

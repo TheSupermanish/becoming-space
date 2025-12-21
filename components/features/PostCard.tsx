@@ -11,9 +11,9 @@ import type { IPost, IComment } from '@/lib/types';
 interface PostCardProps {
   post: IPost;
   currentUserTag?: string;
-  onReact: (postId: string, action: 'hug' | 'unhug' | 'highFive' | 'unhighFive') => void;
-  onComment: (postId: string, content: string) => void;
-  onLikeComment: (postId: string, commentId: string, hasLiked: boolean) => void;
+  onReact?: (postId: string, action: 'hug' | 'unhug' | 'highFive' | 'unhighFive') => void;
+  onComment?: (postId: string, content: string) => void;
+  onLikeComment?: (postId: string, commentId: string, hasLiked: boolean) => void;
   onEdit?: (postId: string, content: string, tags: string[]) => void;
   onDelete?: (postId: string) => void;
 }
@@ -58,7 +58,7 @@ export const PostCard: React.FC<PostCardProps> = ({
 
   const handleSubmitComment = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!commentText.trim() || isSubmitting) return;
+    if (!commentText.trim() || isSubmitting || !onComment) return;
     
     setIsSubmitting(true);
     await onComment(post._id.toString(), commentText);
@@ -67,6 +67,7 @@ export const PostCard: React.FC<PostCardProps> = ({
   };
 
   const handleReaction = () => {
+    if (!onReact) return;
     if (isVent) {
       onReact(post._id.toString(), hasHugged ? 'unhug' : 'hug');
     } else {
@@ -167,10 +168,11 @@ export const PostCard: React.FC<PostCardProps> = ({
           {comment.content}
         </p>
         <button
-          onClick={() => onLikeComment(post._id.toString(), comment._id.toString(), commentHasLiked)}
+          onClick={() => onLikeComment?.(post._id.toString(), comment._id.toString(), commentHasLiked)}
           className={`text-xs flex items-center gap-1 transition-colors ${
             commentHasLiked ? 'text-earth' : 'text-stone/60 hover:text-earth'
           }`}
+          disabled={!onLikeComment}
         >
           <ThumbsUp size={12} className={commentHasLiked ? 'fill-earth' : ''} />
           {comment.likes > 0 && <span>{comment.likes}</span>}
