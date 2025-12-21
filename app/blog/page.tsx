@@ -112,57 +112,70 @@ export default function BlogListPage() {
           <div className="space-y-4">
             {blogs.map((blog) => (
               <Link key={blog._id.toString()} href={`/blog/${blog.slug}`}>
-                <Card className="group hover:shadow-warm transition-all cursor-pointer">
-                  {/* Draft Badge */}
-                  {!blog.isPublished && (
-                    <span className="inline-block px-2 py-0.5 bg-amber-100 text-amber-600 text-xs font-medium rounded-full mb-3">
-                      Draft
-                    </span>
-                  )}
-                  
-                  {/* Title */}
-                  <h2 className="text-lg font-serif font-bold text-bark mb-2 group-hover:text-amber-600 transition-colors">
-                    {blog.title}
-                  </h2>
-                  
-                  {/* Excerpt */}
-                  <p className="text-stone text-sm mb-4 line-clamp-2">
-                    {blog.excerpt}
-                  </p>
-                  
-                  {/* Meta */}
-                  <div className="flex items-center gap-4 text-xs text-stone/70">
-                    <span className="flex items-center gap-1">
-                      <Calendar size={14} />
-                      {formatDate(blog.publishedAt || blog.createdAt)}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Clock size={14} />
-                      {blog.readTime} min read
-                    </span>
-                    {blog.isPublished && (
-                      <span className="flex items-center gap-1">
-                        <Eye size={14} />
-                        {blog.views}
-                      </span>
-                    )}
-                    <span className="flex-1" />
-                    <ChevronRight size={16} className="text-amber-500 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                  
-                  {/* Tags */}
-                  {blog.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-sand/30">
-                      {blog.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-2 py-0.5 bg-amber-50 text-amber-600 text-xs rounded-full"
-                        >
-                          #{tag}
-                        </span>
-                      ))}
+                <Card className="group hover:shadow-warm transition-all cursor-pointer overflow-hidden p-0">
+                  {/* Cover Image */}
+                  {blog.coverImage && (
+                    <div className="w-full h-40 overflow-hidden">
+                      <img
+                        src={blog.coverImage}
+                        alt={blog.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
                     </div>
                   )}
+                  
+                  <div className="p-5">
+                    {/* Draft Badge */}
+                    {!blog.isPublished && (
+                      <span className="inline-block px-2 py-0.5 bg-amber-100 text-amber-600 text-xs font-medium rounded-full mb-3">
+                        Draft
+                      </span>
+                    )}
+                    
+                    {/* Title */}
+                    <h2 className="text-lg font-serif font-bold text-bark mb-2 group-hover:text-amber-600 transition-colors">
+                      {blog.title}
+                    </h2>
+                    
+                    {/* Excerpt */}
+                    <p className="text-stone text-sm mb-4 line-clamp-2">
+                      {blog.excerpt}
+                    </p>
+                  
+                    {/* Meta */}
+                    <div className="flex items-center gap-4 text-xs text-stone/70">
+                      <span className="flex items-center gap-1">
+                        <Calendar size={14} />
+                        {formatDate(blog.publishedAt || blog.createdAt)}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Clock size={14} />
+                        {blog.readTime} min read
+                      </span>
+                      {blog.isPublished && (
+                        <span className="flex items-center gap-1">
+                          <Eye size={14} />
+                          {blog.views}
+                        </span>
+                      )}
+                      <span className="flex-1" />
+                      <ChevronRight size={16} className="text-amber-500 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  
+                    {/* Tags */}
+                    {blog.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-sand/30">
+                        {blog.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="px-2 py-0.5 bg-amber-50 text-amber-600 text-xs rounded-full"
+                          >
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </Card>
               </Link>
             ))}
