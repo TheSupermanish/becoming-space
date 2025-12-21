@@ -56,7 +56,7 @@ export default function LoginPage() {
       setGeneratedTag(optionsData.data.fullTag);
 
       // Step 2: Start WebAuthn registration
-      const registration = await startRegistration(optionsData.data.options);
+      const registration = await startRegistration({ optionsJSON: optionsData.data.options });
 
       // Step 3: Verify registration
       const verifyRes = await fetch('/api/auth/register/verify', {
@@ -102,7 +102,7 @@ export default function LoginPage() {
       }
 
       // Step 2: Start WebAuthn authentication (passkey identifies the user)
-      const authentication = await startAuthentication(optionsData.data.options);
+      const authentication = await startAuthentication({ optionsJSON: optionsData.data.options });
 
       // Step 3: Verify authentication
       const verifyRes = await fetch('/api/auth/login/verify', {
@@ -140,7 +140,7 @@ export default function LoginPage() {
             <div className="w-20 h-20 bg-gradient-to-br from-earth to-earth-dark rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-warm rotate-3">
               <Leaf size={36} className="text-white -rotate-3" />
             </div>
-            <h1 className="text-4xl font-serif font-bold text-bark mb-3">Athena</h1>
+            <h1 className="text-4xl font-serif font-bold text-bark mb-3">Space</h1>
             <p className="text-stone text-lg">A safe space for your mind</p>
           </div>
 
@@ -150,7 +150,7 @@ export default function LoginPage() {
                 <Sparkles className="text-sage flex-shrink-0" size={24} />
                 <div>
                   <p className="font-medium text-bark">AI-Powered Support</p>
-                  <p className="text-sm text-stone">Athena listens without judgment</p>
+                  <p className="text-sm text-stone">Space listens without judgment</p>
                 </div>
               </div>
 
