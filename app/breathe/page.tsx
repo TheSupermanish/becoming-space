@@ -269,8 +269,8 @@ export default function BreathePage() {
                   transform: `scale(${getCircleScale()})`,
                   transitionProperty: 'transform, box-shadow',
                   transitionDuration: getTransitionDuration(),
-                  transitionTimingFunction: phase === 'hold' ? 'linear' : 'cubic-bezier(0.4, 0, 0.2, 1)',
-                  boxShadow: isBreathing && (phase === 'inhale' || phase === 'hold') 
+                  transitionTimingFunction: (phase === 'holdIn' || phase === 'holdOut') ? 'linear' : 'cubic-bezier(0.4, 0, 0.2, 1)',
+                  boxShadow: isBreathing && (phase === 'inhale' || phase === 'holdIn') 
                     ? '0 0 60px rgba(56, 189, 248, 0.5), 0 0 100px rgba(34, 211, 238, 0.3)' 
                     : '0 10px 40px rgba(56, 189, 248, 0.3)',
                 }}
