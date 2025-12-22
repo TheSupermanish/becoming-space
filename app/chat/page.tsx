@@ -14,7 +14,7 @@ export default function ChatPage() {
     {
       id: 'welcome',
       role: 'model',
-      text: "Hello. I'm Space, and I'm here to listen without judgment. How are you feeling today?",
+      text: "Hello. I'm Athena, and I'm here to listen without judgment. How are you feeling today?",
       timestamp: Date.now(),
     },
   ]);
@@ -136,7 +136,7 @@ export default function ChatPage() {
                     <div className="absolute bottom-0 right-0 w-3 h-3 bg-sage border-2 border-white rounded-full" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-bark text-sm">Space</h3>
+                    <h3 className="font-bold text-bark text-sm">Athena</h3>
                     <p className="text-xs text-stone">AI Companion • Always here</p>
                   </div>
                 </div>
