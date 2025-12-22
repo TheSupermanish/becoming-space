@@ -1,13 +1,40 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { BottomNav } from '@/components/features/BottomNav';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: '#C67B5C',
+};
 
 export const metadata: Metadata = {
   title: 'Athena - A Safe Place for Your Mind',
   description: 'Vent your struggles, flex your wins. An anonymous mental health community with AI support.',
   icons: {
     icon: '/icon.svg',
-    apple: '/icon.svg',
+    apple: '/icon-192x192.svg',
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Athena',
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  openGraph: {
+    type: 'website',
+    siteName: 'Athena',
+    title: 'Athena - A Safe Place for Your Mind',
+    description: 'Anonymous mental health support with AI-powered therapeutic guidance.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Athena - A Safe Place for Your Mind',
+    description: 'Anonymous mental health support with AI-powered therapeutic guidance.',
   },
 };
 
