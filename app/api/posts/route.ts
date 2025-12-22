@@ -95,8 +95,8 @@ export async function POST(request: NextRequest) {
       reactions: { hugs: 0, huggedBy: [], highFives: 0, highFivedBy: [] },
     });
 
-    // Generate Space's response asynchronously (don't wait)
-    generateSpaceResponse(post._id.toString(), content, tags || ['General'], validPostType);
+    // Generate Athena's response asynchronously (don't wait)
+    generateAthenaResponse(post._id.toString(), content, tags || ['General'], validPostType);
 
     return NextResponse.json({
       success: true,
@@ -111,18 +111,18 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Helper to generate Space response in background
-async function generateSpaceResponse(postId: string, content: string, tags: string[], postType: PostType) {
+// Helper to generate Athena response in background
+async function generateAthenaResponse(postId: string, content: string, tags: string[], postType: PostType) {
   try {
-    const spaceResponse = await geminiService.generateSpaceResponse(content, tags, postType);
+    const athenaResponse = await geminiService.generateAthenaResponse(content, tags, postType);
     
     await dbConnect();
     await Post.findByIdAndUpdate(postId, {
-      spaceResponse,
+      spaceResponse: athenaResponse,
       isSpaceThinking: false,
     });
   } catch (error) {
-    console.error('Space response error:', error);
+    console.error('Athena response error:', error);
     const fallback = postType === 'flex' 
       ? "That's amazing! Keep celebrating your wins, no matter how small they seem. 🎉"
       : "I'm here with you. While I'm having trouble connecting right now, please know that your feelings are valid.";
