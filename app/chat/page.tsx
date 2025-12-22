@@ -254,7 +254,7 @@ export default function ChatPage() {
         </header>
 
         {/* Messages - with top padding for floating header and bottom for input */}
-        <div className="flex-1 overflow-y-auto px-4 pt-28 pb-40 space-y-4 scrollbar-hide">
+        <div className="flex-1 overflow-y-auto px-4 pt-[120px] pb-40 space-y-4 scrollbar-hide">
           {messages.map((msg) => {
             const isUser = msg.role === 'user';
             return (
