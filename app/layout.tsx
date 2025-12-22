@@ -3,7 +3,7 @@ import './globals.css';
 import { BottomNav } from '@/components/features/BottomNav';
 
 export const metadata: Metadata = {
-  title: 'Space - A Safe Place for Your Mind',
+  title: 'Athena - A Safe Place for Your Mind',
   description: 'Vent your struggles, flex your wins. An anonymous mental health community with AI support.',
   icons: {
     icon: '/icon.svg',
