@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Send, Sparkles, MoreHorizontal, Trash2 } from 'lucide-react';
+import { ArrowLeft, Send, Sparkles, MoreHorizontal, Trash2, Brain } from 'lucide-react';
 import { Avatar } from '@/components/ui/Avatar';
 import { MarkdownView } from '@/components/features/MarkdownView';
 import type { ChatMessage, SessionUser } from '@/lib/types';
@@ -229,14 +229,22 @@ export default function ChatPage() {
                 {showMenu && (
                   <>
                     <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
-                    <div className="absolute right-0 top-12 bg-white rounded-xl shadow-warm border border-sand/50 py-1 z-50 animate-scale-in min-w-[180px]">
+                    <div className="absolute right-0 top-12 bg-white rounded-xl shadow-warm border border-sand/50 py-1 z-50 animate-scale-in min-w-[200px]">
                       <button
                         onClick={handleClearChat}
                         className="flex items-center gap-2 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 w-full transition-colors"
                       >
                         <Trash2 size={16} />
-                        Clear conversation
+                        Clear chat & memory
                       </button>
+                      <div className="border-t border-sand/30 my-1" />
+                      <div className="px-4 py-2 text-xs text-stone/60">
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <Brain size={12} />
+                          <span className="font-medium">Memory active</span>
+                        </div>
+                        <p>Athena remembers this session</p>
+                      </div>
                     </div>
                   </>
                 )}
@@ -246,7 +254,7 @@ export default function ChatPage() {
         </header>
 
         {/* Messages - with top padding for floating header and bottom for input */}
-        <div className="flex-1 overflow-y-auto px-4 pt-24 pb-40 space-y-4 scrollbar-hide">
+        <div className="flex-1 overflow-y-auto px-4 pt-28 pb-40 space-y-4 scrollbar-hide">
           {messages.map((msg) => {
             const isUser = msg.role === 'user';
             return (
