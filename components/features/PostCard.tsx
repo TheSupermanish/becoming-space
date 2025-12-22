@@ -279,7 +279,7 @@ export const PostCard: React.FC<PostCardProps> = ({
           {post.isSpaceThinking ? (
             <div className={`flex items-center gap-3 animate-pulse p-4 rounded-2xl border ${athenaStyles}`}>
               <Sparkles size={20} className={isVent ? 'text-indigo-400' : 'text-amber-400'} style={{ animation: 'spin 3s linear infinite' }} />
-              <span className="text-sm font-medium italic text-stone">Space is preparing thoughtful guidance...</span>
+              <span className="text-sm font-medium italic text-stone">Athena is preparing thoughtful guidance...</span>
             </div>
           ) : (
             <div className={`rounded-2xl p-5 border ${athenaStyles}`}>
@@ -287,7 +287,7 @@ export const PostCard: React.FC<PostCardProps> = ({
                 <div className={`p-1.5 rounded-full ${isVent ? 'bg-indigo-100' : 'bg-amber-100'}`}>
                   <Sparkles className={isVent ? 'text-indigo-500' : 'text-amber-500'} size={14} />
                 </div>
-                <span className={`font-bold text-sm ${isVent ? 'text-indigo-700' : 'text-amber-700'}`}>Space</span>
+                <span className={`font-bold text-sm ${isVent ? 'text-indigo-700' : 'text-amber-700'}`}>Athena</span>
               </div>
               <MarkdownView content={post.spaceResponse || ''} />
             </div>
