@@ -201,7 +201,7 @@ export type FlexTag = typeof FLEX_TAGS[number];
 
 // Mood emojis for check-in
 export const MOOD_EMOJIS = {
-  1: { emoji: '😢', label: 'Struggling', color: 'text-dusk-400' },
+  1: { emoji: '😢', label: 'Struggling', color: 'text-stone-500' },
   2: { emoji: '😔', label: 'Low', color: 'text-blue-400' },
   3: { emoji: '😐', label: 'Okay', color: 'text-stone' },
   4: { emoji: '🙂', label: 'Good', color: 'text-sage' },

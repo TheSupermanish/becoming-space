@@ -91,7 +91,7 @@ export default function CreatePostPage() {
 
   return (
     <div className={`min-h-screen pb-8 transition-colors duration-500 ${
-      isVent ? 'bg-gradient-to-b from-dusk-50/50 to-cream' : 'bg-gradient-to-b from-amber-50/50 to-cream'
+      isVent ? 'bg-gradient-to-b from-stone-100/50 to-cream' : 'bg-gradient-to-b from-amber-50/50 to-cream'
     }`}>
       <div className="max-w-2xl mx-auto px-4 pt-6">
         {/* Back Button */}
@@ -111,8 +111,8 @@ export default function CreatePostPage() {
               onClick={() => handleTypeChange('vent')}
               className={`px-6 py-3 rounded-xl font-semibold text-sm transition-all flex items-center gap-2 ${
                 isVent
-                  ? 'bg-gradient-to-r from-dusk-500 to-dusk-600 text-white shadow-lg shadow-dusk-200'
-                  : 'text-stone hover:text-dusk-600 hover:bg-dusk-50'
+                  ? 'bg-gradient-to-r from-stone-600 to-stone-700 text-white shadow-lg shadow-stone-200'
+                  : 'text-stone hover:text-stone-700 hover:bg-stone-100'
               }`}
             >
               <Wind size={18} />
@@ -134,13 +134,13 @@ export default function CreatePostPage() {
         </div>
 
         <Card className={`animate-slide-up transition-all duration-300 ${
-          isVent ? 'border-dusk-100' : 'border-amber-100'
+          isVent ? 'border-stone-200' : 'border-amber-100'
         }`}>
           {/* Header */}
           <div className="flex items-center gap-3 mb-6">
-            <div className={`p-3 rounded-2xl ${isVent ? 'bg-dusk-100' : 'bg-amber-100'}`}>
+            <div className={`p-3 rounded-2xl ${isVent ? 'bg-stone-200' : 'bg-amber-100'}`}>
               {isVent ? (
-                <CloudRain size={24} className="text-dusk-500" />
+                <CloudRain size={24} className="text-stone-600" />
               ) : (
                 <Sparkles size={24} className="text-amber-500" />
               )}
@@ -167,7 +167,7 @@ export default function CreatePostPage() {
                 }
                 className={`w-full h-48 border-0 rounded-2xl p-5 placeholder-stone/40 resize-none focus:outline-none focus:ring-2 text-lg leading-relaxed transition-colors ${
                   isVent 
-                    ? 'bg-dusk-50/50 text-bark focus:ring-dusk-200' 
+                    ? 'bg-stone-50 text-bark focus:ring-stone-200' 
                     : 'bg-amber-50/50 text-bark focus:ring-amber-200'
                 }`}
                 maxLength={5000}
@@ -197,9 +197,9 @@ export default function CreatePostPage() {
             </div>
 
             {/* Athena Info */}
-            <div className={`rounded-2xl p-4 mb-6 ${isVent ? 'bg-dusk-50' : 'bg-amber-50'}`}>
+            <div className={`rounded-2xl p-4 mb-6 ${isVent ? 'bg-stone-100' : 'bg-amber-50'}`}>
               <div className="flex items-start gap-3">
-                <Sparkles className={isVent ? 'text-dusk-500' : 'text-amber-500'} size={20} />
+                <Sparkles className={isVent ? 'text-stone-600' : 'text-amber-500'} size={20} />
                 <div>
                   <p className="font-medium text-bark text-sm">Athena will respond</p>
                   <p className="text-xs text-stone mt-1">

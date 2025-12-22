@@ -307,7 +307,7 @@ export default function FeedPage() {
                   <button
                     onClick={() => { setActiveType('vent'); setActiveTag(null); }}
                     className={`w-full text-left px-3 py-2 rounded-xl text-sm font-medium transition-colors flex items-center gap-2 ${
-                      activeType === 'vent' ? 'bg-dusk-500 text-white' : 'text-dusk-600 hover:bg-dusk-50'
+                      activeType === 'vent' ? 'bg-stone-600 text-white' : 'text-stone-600 hover:bg-stone-100'
                     }`}
                   >
                     <Wind size={16} /> Vents
@@ -358,7 +358,7 @@ export default function FeedPage() {
                 </div>
               </div>
               <div className="flex gap-2 mt-3 pt-3 border-t border-sand/30">
-                <button className="flex-1 flex items-center justify-center gap-2 py-2 text-dusk-500 hover:bg-dusk-50 rounded-xl transition-colors text-sm font-medium">
+                <button className="flex-1 flex items-center justify-center gap-2 py-2 text-stone-600 hover:bg-stone-100 rounded-xl transition-colors text-sm font-medium">
                   <Wind size={18} /> Vent
                 </button>
                 <button className="flex-1 flex items-center justify-center gap-2 py-2 text-amber-500 hover:bg-amber-50 rounded-xl transition-colors text-sm font-medium">
@@ -380,7 +380,7 @@ export default function FeedPage() {
               <button
                 onClick={() => { setActiveType('vent'); setActiveTag(null); }}
                 className={`px-4 py-2 rounded-full font-medium text-sm whitespace-nowrap transition-all flex items-center gap-1.5 ${
-                  activeType === 'vent' ? 'bg-dusk-500 text-white' : 'bg-dusk-50 text-dusk-600'
+                  activeType === 'vent' ? 'bg-stone-600 text-white' : 'bg-stone-100 text-stone-600'
                 }`}
               >
                 <Wind size={14} /> Vents
@@ -509,8 +509,8 @@ export default function FeedPage() {
                 onClick={() => { setPostType('vent'); setSelectedTags([]); }}
                 className={`flex-1 py-2.5 rounded-xl font-medium text-sm transition-all flex items-center justify-center gap-2 ${
                   postType === 'vent'
-                    ? 'bg-dusk-500 text-white'
-                    : 'text-stone hover:bg-dusk-50 hover:text-dusk-600'
+                    ? 'bg-stone-600 text-white'
+                    : 'text-stone hover:bg-stone-100 hover:text-stone-700'
                 }`}
               >
                 <Wind size={18} /> Vent
@@ -542,7 +542,7 @@ export default function FeedPage() {
                 onChange={(e) => setPostContent(e.target.value)}
                 placeholder={postType === 'vent' ? "What's weighing on you?" : "What's something amazing that happened?"}
                 className={`w-full h-32 border-0 rounded-xl p-3 text-bark placeholder-stone/40 resize-none focus:outline-none focus:ring-2 text-[15px] ${
-                  postType === 'vent' ? 'bg-dusk-50/50 focus:ring-dusk-200' : 'bg-amber-50/50 focus:ring-amber-200'
+                  postType === 'vent' ? 'bg-stone-50 focus:ring-stone-200' : 'bg-amber-50/50 focus:ring-amber-200'
                 }`}
                 autoFocus
               />
@@ -557,7 +557,7 @@ export default function FeedPage() {
                       onClick={() => toggleTag(tag)}
                       className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                         selectedTags.includes(tag)
-                          ? postType === 'vent' ? 'bg-dusk-500 text-white' : 'bg-amber-500 text-white'
+                          ? postType === 'vent' ? 'bg-stone-600 text-white' : 'bg-amber-500 text-white'
                           : 'bg-sand/50 text-stone hover:bg-sand'
                       }`}
                     >

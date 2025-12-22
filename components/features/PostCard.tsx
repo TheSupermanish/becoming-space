@@ -98,15 +98,15 @@ export const PostCard: React.FC<PostCardProps> = ({
   const sortedComments = [...(post.comments || [])].sort((a, b) => b.likes - a.likes);
 
   const athenaStyles = isVent
-    ? 'bg-dusk-50 border-dusk-100'
+    ? 'bg-stone-100 border-stone-200'
     : 'bg-amber-50 border-amber-100';
 
   const reactionColor = isVent
-    ? hasReacted ? 'text-dusk-500' : 'text-stone/60 hover:text-dusk-500'
+    ? hasReacted ? 'text-stone-600' : 'text-stone/60 hover:text-stone-600'
     : hasReacted ? 'text-amber-500' : 'text-stone/60 hover:text-amber-500';
 
   const reactionBg = isVent
-    ? hasReacted ? 'bg-dusk-50' : 'group-hover:bg-dusk-50'
+    ? hasReacted ? 'bg-stone-100' : 'group-hover:bg-stone-100'
     : hasReacted ? 'bg-amber-50' : 'group-hover:bg-amber-50';
 
   const renderContent = () => {
@@ -204,7 +204,7 @@ export const PostCard: React.FC<PostCardProps> = ({
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-bark font-bold tracking-tight">{post.authorTag}</span>
               <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                isVent ? 'bg-dusk-100 text-dusk-600' : 'bg-amber-100 text-amber-600'
+                isVent ? 'bg-stone-200 text-stone-700' : 'bg-amber-100 text-amber-600'
               }`}>
                 {isVent ? '🌧️ Vent' : '✨ Flex'}
               </span>
@@ -278,16 +278,16 @@ export const PostCard: React.FC<PostCardProps> = ({
         <div className="mb-4">
           {post.isSpaceThinking ? (
             <div className={`flex items-center gap-3 animate-pulse p-4 rounded-2xl border ${athenaStyles}`}>
-              <Sparkles size={20} className={isVent ? 'text-dusk-400' : 'text-amber-400'} style={{ animation: 'spin 3s linear infinite' }} />
+              <Sparkles size={20} className={isVent ? 'text-stone-500' : 'text-amber-400'} style={{ animation: 'spin 3s linear infinite' }} />
               <span className="text-sm font-medium italic text-stone">Athena is preparing thoughtful guidance...</span>
             </div>
           ) : (
             <div className={`rounded-2xl p-5 border ${athenaStyles}`}>
               <div className="flex items-center gap-2 mb-3">
-                <div className={`p-1.5 rounded-full ${isVent ? 'bg-dusk-100' : 'bg-amber-100'}`}>
-                  <Sparkles className={isVent ? 'text-dusk-500' : 'text-amber-500'} size={14} />
+                <div className={`p-1.5 rounded-full ${isVent ? 'bg-stone-200' : 'bg-amber-100'}`}>
+                  <Sparkles className={isVent ? 'text-stone-600' : 'text-amber-500'} size={14} />
                 </div>
-                <span className={`font-bold text-sm ${isVent ? 'text-dusk-700' : 'text-amber-700'}`}>Athena</span>
+                <span className={`font-bold text-sm ${isVent ? 'text-stone-700' : 'text-amber-700'}`}>Athena</span>
               </div>
               <MarkdownView content={post.spaceResponse || ''} />
             </div>
@@ -306,7 +306,7 @@ export const PostCard: React.FC<PostCardProps> = ({
             >
               <div className={`p-2 rounded-full transition-colors ${reactionBg}`}>
                 {isVent ? (
-                  <HandHeart size={20} className={hasHugged ? 'fill-dusk-200' : ''} />
+                  <HandHeart size={20} className={hasHugged ? 'fill-stone-300' : ''} />
                 ) : (
                   <span className="text-lg leading-none">🙌</span>
                 )}
