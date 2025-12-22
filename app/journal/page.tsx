@@ -535,12 +535,12 @@ export default function JournalPage() {
                           </button>
                         )}
 
-                        {/* Space's Response */}
+                        {/* Athena's Response */}
                         {entry.spaceResponse && (
                           <div className="mt-4 p-3 bg-sage/10 rounded-xl border border-sage/20">
                             <div className="flex items-center gap-2 mb-2">
                               <Sparkles size={14} className="text-sage" />
-                              <span className="text-xs font-medium text-sage">Space</span>
+                              <span className="text-xs font-medium text-sage">Athena</span>
                             </div>
                             <p className="text-sm text-bark/80 leading-relaxed">
                               {entry.spaceResponse}
