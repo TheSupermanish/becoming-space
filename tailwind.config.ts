@@ -45,6 +45,20 @@ const config: Config = {
         blur: {
           bg: '#F5E6E0',
         },
+        // Warm muted purple for Vent mode (replaces indigo)
+        dusk: {
+          DEFAULT: '#8B7E97',
+          50: '#F5F3F7',
+          100: '#E8E4ED',
+          200: '#D4CDD9',
+          300: '#B8AEC2',
+          400: '#9B8FA8',
+          500: '#8B7E97',
+          600: '#736680',
+          700: '#5E5369',
+          800: '#4A4254',
+          900: '#3A3442',
+        },
       },
       fontFamily: {
         serif: ['Fraunces', 'Georgia', 'serif'],

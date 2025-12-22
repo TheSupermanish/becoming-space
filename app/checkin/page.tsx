@@ -122,7 +122,7 @@ export default function CheckinPage() {
 
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-purple-400 to-indigo-500 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-200">
+          <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-dusk-400 to-dusk-600 rounded-2xl flex items-center justify-center shadow-lg shadow-dusk-200">
             <Sparkles size={32} className="text-white" />
           </div>
           <h1 className="text-2xl font-serif font-bold text-bark mb-2">
@@ -194,7 +194,7 @@ export default function CheckinPage() {
             onClick={handleSubmit}
             disabled={!selectedMood || isSubmitting}
             isLoading={isSubmitting}
-            className="w-full bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600"
+            className="w-full bg-gradient-to-r from-dusk-500 to-dusk-600 hover:from-dusk-600 hover:to-dusk-700"
           >
             {hasCheckedIn ? 'Update Check-in' : 'Record Check-in'}
           </Button>
