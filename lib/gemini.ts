@@ -252,35 +252,32 @@ class GeminiService {
       const ai = this.getAI();
       
       const prompt = previousSummary
-        ? `You are creating a conversation summary for a mental health chat app.
+        ? `Update this conversation memory for a therapy chatbot. Keep ONLY facts about the USER.
 
-Previous summary of conversation:
-"${previousSummary}"
+Current memory:
+${previousSummary}
 
-Latest exchange:
-User: "${userMessage}"
-Athena: "${athenaResponse}"
+New info from user: "${userMessage}"
 
-Create an updated summary that:
-- Captures key emotional themes and topics discussed
-- Notes any important context (feelings, situations, progress)
-- Stays under 150 words
-- Is written as brief notes, not prose
+Rules:
+- Only store facts ABOUT THE USER (feelings, situations, history, preferences)
+- Use bullet points, max 5-7 points
+- Drop old/irrelevant points to make room for new ones
+- Never mention "Athena" or what the AI said
+- Max 100 words total
 
-Return ONLY the summary, no preamble.`
-        : `You are creating a conversation summary for a mental health chat app.
+Return ONLY the bullet points:`
+        : `Create a brief memory note about this user for a therapy chatbot.
 
-First exchange:
-User: "${userMessage}"
-Athena: "${athenaResponse}"
+User said: "${userMessage}"
 
-Create a brief summary that:
-- Captures the main topic/emotion
-- Notes any important context
-- Stays under 100 words
-- Is written as brief notes
+Rules:
+- Only note facts ABOUT THE USER (feelings, situations, current state)
+- Use 1-3 bullet points
+- Never mention "Athena" or what the AI said
+- Max 50 words
 
-Return ONLY the summary, no preamble.`;
+Return ONLY the bullet points:`;
 
       const response = await ai.models.generateContent({
         model: 'gemini-2.0-flash',
