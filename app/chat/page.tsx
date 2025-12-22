@@ -169,8 +169,8 @@ export default function ChatPage() {
           </div>
         </header>
 
-        {/* Messages - with top padding for floating header */}
-        <div className="flex-1 overflow-y-auto px-4 pt-24 pb-6 space-y-4 scrollbar-hide">
+        {/* Messages - with top padding for floating header and bottom for input */}
+        <div className="flex-1 overflow-y-auto px-4 pt-24 pb-40 space-y-4 scrollbar-hide">
           {messages.map((msg) => {
             const isUser = msg.role === 'user';
             return (
@@ -227,7 +227,7 @@ export default function ChatPage() {
         </div>
 
         {/* Input - Fixed at bottom, above nav with proper spacing */}
-        <div className="sticky bottom-0 bg-cream/95 backdrop-blur-xl px-6 py-3 pb-24 lg:pb-4 border-t border-sand/30">
+        <div className="fixed bottom-0 left-0 right-0 bg-cream/95 backdrop-blur-xl px-4 py-3 mb-20 border-t border-sand/30 z-10">
           <form onSubmit={handleSend} className="flex items-center gap-3 max-w-2xl mx-auto">
             <div className="flex-1 relative">
               <input
