@@ -252,14 +252,14 @@ export default function FeedPage() {
               <div className="w-10 h-10 bg-gradient-to-br from-earth to-earth-dark rounded-xl flex items-center justify-center shadow-warm">
                 <Leaf size={20} className="text-white" />
               </div>
-              <span className="font-serif text-xl font-bold text-bark">Space</span>
+              <span className="font-serif text-xl font-bold text-bark">Athena</span>
             </div>
 
             <div className="flex items-center gap-3">
               <button
                 onClick={() => router.push('/chat')}
                 className="p-2 text-stone hover:text-earth hover:bg-earth/5 rounded-xl transition-colors"
-                title="Chat with Space"
+                title="Chat with Athena"
               >
                 <MessageSquareHeart size={20} />
               </button>
@@ -482,7 +482,7 @@ export default function FeedPage() {
                     onClick={() => router.push('/chat')}
                     className="w-full text-left px-3 py-2.5 rounded-xl text-sm text-stone hover:bg-earth/5 hover:text-earth transition-colors"
                   >
-                    💬 Chat with Space
+                    💬 Chat with Athena
                   </button>
                 </div>
               </div>
