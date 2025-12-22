@@ -62,3 +62,4 @@ export const BlurredContent: React.FC<BlurredContentProps> = ({
   );
 };
 
+
