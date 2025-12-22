@@ -81,3 +81,4 @@ export const CardFooter: React.FC<CardFooterProps> = ({ children, className = ''
   <div className={`mt-4 pt-4 border-t border-sand/50 ${className}`}>{children}</div>
 );
 
+
