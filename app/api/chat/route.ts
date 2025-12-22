@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { message, newSession } = await request.json();
+    const { message, summary: previousSummary } = await request.json();
 
     if (!message || typeof message !== 'string' || message.trim().length === 0) {
       return NextResponse.json(
@@ -28,18 +28,31 @@ export async function POST(request: NextRequest) {
     // Get or create chat session for this user
     let chatSession = chatSessions.get(user.fullTag);
     
-    if (!chatSession || newSession) {
+    if (!chatSession) {
       chatSession = geminiService.createChatSession();
       chatSessions.set(user.fullTag, chatSession);
     }
 
+    // Build message with context from summary if available
+    const contextualMessage = previousSummary 
+      ? `[Previous conversation summary: ${previousSummary}]\n\nUser's new message: ${message.trim()}`
+      : message.trim();
+
     // Send message and get response
-    const response = await geminiService.sendChatMessage(chatSession, message.trim());
+    const response = await geminiService.sendChatMessage(chatSession, contextualMessage);
+
+    // Generate updated summary including this exchange
+    const newSummary = await geminiService.generateConversationSummary(
+      previousSummary || '',
+      message.trim(),
+      response
+    );
 
     return NextResponse.json({
       success: true,
       data: {
         response,
+        summary: newSummary,
         timestamp: Date.now(),
       },
     });

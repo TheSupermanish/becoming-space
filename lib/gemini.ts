@@ -238,6 +238,62 @@ class GeminiService {
       return "I'm glad you're writing. Keep it up! 💚";
     }
   }
+
+  /**
+   * Generate a rolling summary of the conversation
+   * Takes previous summary + latest exchange and creates updated summary
+   */
+  async generateConversationSummary(
+    previousSummary: string,
+    userMessage: string,
+    athenaResponse: string
+  ): Promise<string> {
+    try {
+      const ai = this.getAI();
+      
+      const prompt = previousSummary
+        ? `You are creating a conversation summary for a mental health chat app.
+
+Previous summary of conversation:
+"${previousSummary}"
+
+Latest exchange:
+User: "${userMessage}"
+Athena: "${athenaResponse}"
+
+Create an updated summary that:
+- Captures key emotional themes and topics discussed
+- Notes any important context (feelings, situations, progress)
+- Stays under 150 words
+- Is written as brief notes, not prose
+
+Return ONLY the summary, no preamble.`
+        : `You are creating a conversation summary for a mental health chat app.
+
+First exchange:
+User: "${userMessage}"
+Athena: "${athenaResponse}"
+
+Create a brief summary that:
+- Captures the main topic/emotion
+- Notes any important context
+- Stays under 100 words
+- Is written as brief notes
+
+Return ONLY the summary, no preamble.`;
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.0-flash',
+        contents: prompt,
+      });
+
+      return response.text || previousSummary || '';
+    } catch (error) {
+      console.error('Summary Generation Error:', error);
+      // Return previous summary if generation fails
+      return previousSummary || '';
+    }
+  }
 }
 
 export const geminiService = new GeminiService();

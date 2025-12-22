@@ -7,22 +7,60 @@ import { Avatar } from '@/components/ui/Avatar';
 import { MarkdownView } from '@/components/features/MarkdownView';
 import type { ChatMessage, SessionUser } from '@/lib/types';
 
+const CHAT_SUMMARY_KEY = 'athena_chat_summary';
+const CHAT_MESSAGES_KEY = 'athena_chat_messages';
+
+// Helper to get/set summary from localStorage
+const getSummary = (): string => {
+  if (typeof window === 'undefined') return '';
+  return localStorage.getItem(CHAT_SUMMARY_KEY) || '';
+};
+
+const saveSummary = (summary: string) => {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem(CHAT_SUMMARY_KEY, summary);
+};
+
+const clearSummary = () => {
+  if (typeof window === 'undefined') return;
+  localStorage.removeItem(CHAT_SUMMARY_KEY);
+};
+
+// Helper to get/set messages from localStorage (for UI display)
+const getStoredMessages = (): ChatMessage[] => {
+  if (typeof window === 'undefined') return [];
+  try {
+    const stored = localStorage.getItem(CHAT_MESSAGES_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+};
+
+const saveMessages = (messages: ChatMessage[]) => {
+  if (typeof window === 'undefined') return;
+  // Keep last 50 messages for display
+  const toStore = messages.slice(-50);
+  localStorage.setItem(CHAT_MESSAGES_KEY, JSON.stringify(toStore));
+};
+
+const clearMessages = () => {
+  if (typeof window === 'undefined') return;
+  localStorage.removeItem(CHAT_MESSAGES_KEY);
+};
+
 export default function ChatPage() {
   const router = useRouter();
   const [user, setUser] = useState<SessionUser | null>(null);
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: 'welcome',
-      role: 'model',
-      text: "Hello. I'm Athena, and I'm here to listen without judgment. How are you feeling today?",
-      timestamp: Date.now(),
-    },
-  ]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [conversationSummary, setConversationSummary] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Load user, messages, and summary on mount
   useEffect(() => {
     fetch('/api/auth/me')
       .then((res) => res.json())
@@ -31,10 +69,35 @@ export default function ChatPage() {
           router.replace('/login');
         } else {
           setUser(data.data);
+          
+          // Load stored messages and summary
+          const storedMessages = getStoredMessages();
+          const storedSummary = getSummary();
+          
+          if (storedMessages.length > 0) {
+            setMessages(storedMessages);
+            setConversationSummary(storedSummary);
+          } else {
+            // First visit - show welcome message
+            setMessages([{
+              id: 'welcome',
+              role: 'model',
+              text: "Hello. I'm Athena, and I'm here to listen without judgment. How are you feeling today?",
+              timestamp: Date.now(),
+            }]);
+          }
+          setIsInitialized(true);
         }
       })
       .catch(() => router.replace('/login'));
   }, [router]);
+
+  // Save messages to localStorage whenever they change
+  useEffect(() => {
+    if (isInitialized && messages.length > 0) {
+      saveMessages(messages);
+    }
+  }, [messages, isInitialized]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -59,7 +122,10 @@ export default function ChatPage() {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMessage.text }),
+        body: JSON.stringify({ 
+          message: userMessage.text,
+          summary: conversationSummary, // Send current summary for context
+        }),
       });
 
       const data = await res.json();
@@ -72,6 +138,12 @@ export default function ChatPage() {
       };
 
       setMessages((prev) => [...prev, modelMessage]);
+
+      // Update and save the new summary
+      if (data.success && data.data.summary) {
+        setConversationSummary(data.data.summary);
+        saveSummary(data.data.summary);
+      }
     } catch (error) {
       const errorMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
@@ -87,6 +159,10 @@ export default function ChatPage() {
 
   const handleClearChat = async () => {
     await fetch('/api/chat', { method: 'DELETE' });
+    // Clear localStorage - both messages and summary
+    clearMessages();
+    clearSummary();
+    setConversationSummary('');
     setMessages([
       {
         id: 'welcome-new',
