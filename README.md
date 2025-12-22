@@ -1,10 +1,10 @@
-# 🌿 Space - A Safe Place for Your Mind
+# 🌿 Athena - A Safe Place for Your Mind
 
-**Space** is an anonymous mental health support platform where users can vent their struggles, celebrate their wins, and receive AI-powered therapeutic guidance — all without revealing their identity.
+**Athena** is an anonymous mental health support platform where users can vent their struggles, celebrate their wins, and receive AI-powered therapeutic guidance — all without revealing their identity.
 
-🔗 **Live Demo**: [space.becomingbetter.app](https://space.becomingbetter.app)
+🔗 **Live Demo**: [athena.becomingbetter.app](https://athena.becomingbetter.app)
 
-![Space Banner](https://img.shields.io/badge/Mental%20Health-Support-8FA68A?style=for-the-badge)
+![Athena Banner](https://img.shields.io/badge/Mental%20Health-Support-8FA68A?style=for-the-badge)
 ![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green?style=for-the-badge&logo=mongodb)
@@ -24,9 +24,9 @@ Mental health stigma remains a significant barrier worldwide, especially in coll
 
 ### Our Solution
 
-**Space** creates a judgment-free zone where anyone can:
+**Athena** creates a judgment-free zone where anyone can:
 - Share their struggles anonymously using **passkey authentication** (no email, no password, no identity)
-- Receive immediate, empathetic responses from **Space**, our AI therapist powered by Google Gemini
+- Receive immediate, empathetic responses from **Athena**, our AI therapist powered by Google Gemini
 - Connect with a supportive community through comments and reactions
 - Access evidence-based mental wellness tools anytime, anywhere
 
@@ -46,8 +46,8 @@ Celebrate your wins, no matter how small. Positive moments deserve recognition!
 - **🙌 High-Fives** - Community celebrates with you
 - **Amber-themed UI** with energetic, uplifting design
 
-### 🤖 Space - AI Therapist
-Powered by Google Gemini, Space provides:
+### 🤖 Athena - AI Therapist
+Powered by Google Gemini, Athena provides:
 - **Personalized therapeutic responses** to every post
 - **1-on-1 chat sessions** for deeper conversations
 - **Content moderation** to keep the community safe
@@ -115,7 +115,7 @@ True privacy through WebAuthn passkeys:
 
 ### Designed for Global Accessibility
 
-**Space** was built with cultural sensitivity in mind:
+**Athena** was built with cultural sensitivity in mind:
 
 #### 🇮🇳 South Asian Communities
 - Addresses the stigma around mental health discussions
@@ -162,8 +162,8 @@ Our features are informed by evidence-based practices:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/space.git
-   cd space
+   git clone https://github.com/yourusername/athena.git
+   cd athena
    ```
 
 2. **Install dependencies**
@@ -176,7 +176,7 @@ Our features are informed by evidence-based practices:
    Create a `.env.local` file:
    ```env
    # MongoDB Connection
-   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/space?retryWrites=true&w=majority
+   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/athena?retryWrites=true&w=majority
 
    # Google Gemini API
    GEMINI_API_KEY=your_gemini_api_key_here
@@ -186,7 +186,7 @@ Our features are informed by evidence-based practices:
 
    # WebAuthn Configuration
    WEBAUTHN_RP_ID=localhost
-   WEBAUTHN_RP_NAME=Space
+   WEBAUTHN_RP_NAME=Athena
    WEBAUTHN_ORIGIN=http://localhost:3000
    ```
 
@@ -212,18 +212,18 @@ npm start
 ## 📁 Project Structure
 
 ```
-space/
+athena/
 ├── app/                      # Next.js App Router pages
 │   ├── api/                  # API routes
 │   │   ├── auth/             # WebAuthn authentication
 │   │   ├── posts/            # Posts CRUD & reactions
-│   │   ├── chat/             # Space chat endpoint
+│   │   ├── chat/             # Athena chat endpoint
 │   │   ├── mood/             # Mood check-in API
 │   │   ├── journal/          # Private journal API
 │   │   └── streak/           # Streak tracking API
 │   ├── feed/                 # Main feed page
 │   ├── create/               # Post creation page
-│   ├── chat/                 # Space chat interface
+│   ├── chat/                 # Athena chat interface
 │   ├── checkin/              # Daily mood check-in
 │   ├── journal/              # Private journal
 │   ├── breathe/              # Breathing & grounding tools
@@ -275,7 +275,7 @@ space/
 | `/api/posts` | GET/POST | List posts / Create post |
 | `/api/posts/[id]` | GET/PATCH/DELETE | Get/Update/Delete post |
 | `/api/posts/[id]/comments` | POST/PATCH | Add/Like comment |
-| `/api/chat` | POST/DELETE | Chat with Space / Clear history |
+| `/api/chat` | POST/DELETE | Chat with Athena / Clear history |
 | `/api/mood` | GET/POST | Get mood history / Log mood |
 | `/api/journal` | GET/POST | Get entries / Create entry |
 | `/api/journal/[id]` | PATCH/DELETE | Update/Delete entry |
@@ -290,7 +290,7 @@ space/
 | Color | Hex | Usage |
 |-------|-----|-------|
 | Earth | `#C67B5C` | Primary actions, buttons |
-| Sage | `#8FA68A` | Success, Space, calming |
+| Sage | `#8FA68A` | Success, Athena, calming |
 | Bark | `#3D3631` | Text, headings |
 | Stone | `#6B6259` | Secondary text |
 | Cream | `#FAF7F2` | Background |
@@ -325,7 +325,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- **Google Gemini** for powering Space's therapeutic responses
+- **Google Gemini** for powering Athena's therapeutic responses
 - **SimpleWebAuthn** for passwordless authentication
 - **Tailwind CSS** for the beautiful, responsive design
 - The mental health community for inspiration and feedback
