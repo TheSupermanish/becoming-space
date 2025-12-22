@@ -201,11 +201,11 @@ export default function CreatePostPage() {
               <div className="flex items-start gap-3">
                 <Sparkles className={isVent ? 'text-indigo-500' : 'text-amber-500'} size={20} />
                 <div>
-                  <p className="font-medium text-bark text-sm">Space will respond</p>
+                  <p className="font-medium text-bark text-sm">Athena will respond</p>
                   <p className="text-xs text-stone mt-1">
                     {isVent 
-                      ? 'Space will provide supportive guidance and gentle coping strategies.' 
-                      : 'Space will celebrate with you and help you appreciate your growth!'
+                      ? 'Athena will provide supportive guidance and gentle coping strategies.' 
+                      : 'Athena will celebrate with you and help you appreciate your growth!'
                     }
                   </p>
                 </div>
