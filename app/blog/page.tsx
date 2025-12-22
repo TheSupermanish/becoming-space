@@ -109,10 +109,10 @@ export default function BlogListPage() {
             )}
           </Card>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-6">
             {blogs.map((blog) => (
               <Link key={blog._id.toString()} href={`/blog/${blog.slug}`}>
-                <Card className="group hover:shadow-warm transition-all cursor-pointer overflow-hidden p-4">
+                <Card className="group hover:shadow-warm transition-all cursor-pointer overflow-hidden p-5">
                   {/* Cover Image */}
                   {blog.coverImage && (
                     <div className="w-full h-48 overflow-hidden rounded-xl mb-4 -mt-1">
