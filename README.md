@@ -2,7 +2,7 @@
 
 **Athena** is an anonymous mental health support platform where users can vent their struggles, celebrate their wins, and receive AI-powered therapeutic guidance — all without revealing their identity.
 
-🔗 **Live Demo**: [athena.becomingbetter.app](https://athena.becomingbetter.app)
+🔗 **Live Demo**: [space.becomingbetter.app](https://space.becomingbetter.app)
 
 ![Athena Banner](https://img.shields.io/badge/Mental%20Health-Support-8FA68A?style=for-the-badge)
 ![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)
